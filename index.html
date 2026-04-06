@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>鴻海科技集團-企業策略 | Strategy Analysis of Foxconn</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>
+tailwind.config={
+  darkMode:'class',
+  theme:{
+    extend:{
+      colors: {
+        bcgGreen: '#004030',
+        bcgGold: '#D8C3A5',
+        bcgGreenDark: '#002b20',
+      },
+      fontFamily:{
+        sans:['Inter','sans-serif'],
+        serif:['Merriweather','serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+@keyframes fadeInUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.animate-fade-in{animation:fadeInUp .5s ease-out forwards}
+.perspective{perspective:1000px}
+.transform-style-3d{transform-style:preserve-3d}
+.backface-hidden{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.rotate-y-180{transform:rotateY(180deg)}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#D8C3A5;border-radius:10px}
+.dark ::-webkit-scrollbar-thumb{background:#475569}
+::selection{background:#004030;color:#fff}
+.dark ::selection{background:#D8C3A5;color:#004030}
+body { -webkit-user-select: none; user-select: none; }
+</style>
+</head>
+<body class="bg-[#f4f4f4] dark:bg-[#121212] text-slate-800 dark:text-slate-200">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+/* ===== Security Hook ===== */
+const useSecurity = () => {
+  useEffect(() => {
+    const preventDefault = (e) => e.preventDefault();
+    document.addEventListener('contextmenu', preventDefault);
+    const blockKeys = (e) => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
+        (e.ctrlKey && (e.key === 's' || e.key === 'S')) ||
+        (e.ctrlKey && (e.key === 'p' || e.key === 'P')) ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J' || e.key === 'c' || e.key === 'C'))
+      ) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', blockKeys);
+    document.addEventListener('selectstart', preventDefault);
+    document.addEventListener('dragstart', preventDefault);
+    return () => {
+      document.removeEventListener('contextmenu', preventDefault);
+      document.removeEventListener('keydown', blockKeys);
+      document.removeEventListener('selectstart', preventDefault);
+      document.removeEventListener('dragstart', preventDefault);
+    };
+  }, []);
+};
+
+/* ===== SVG Icons ===== */
+const IconBookOpen=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
+const IconCheckCircle=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+const IconXCircle=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>;
+const IconGlobe=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>;
+const IconChevronRight=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"/></svg>;
+const IconChevronLeft=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="15 18 9 12 15 6"/></svg>;
+const IconMenu=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const IconX=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+const IconMoon=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>;
+const IconSun=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>;
+const IconPlay=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"/></svg>;
+const IconPause=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>;
+const IconSquare=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>;
+const IconActivity=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
+const IconTarget=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
+const IconShield=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
+const IconMap=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>;
+const IconHome=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+const IconDownload=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
+const IconRefreshCcw=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"/><path d="M3.51 15A9 9 0 0 0 18.36 18.36L23 14"/></svg>;
+const IconLayers=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>;
+const IconFlag=({size=24,className=""})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>;
+
+/* ===== CONTENT & DATA DICTIONARY ===== */
+const DICT = {
+  UI: {
+    brand: { en: "FOXCONN", tw: "FOXCONN" },
+    title: { en: "Strategy Analysis of Foxconn", tw: "鴻海科技集團-企業策略" },
+    executiveSummary: { en: "Executive Summary", tw: "執行摘要" },
+    interactiveLab: { en: "Interactive Research Lab", tw: "互動研究室" },
+    externalResources: { en: "External Research Resources", tw: "外部研究資源" },
+    analytics: { en: "Research Analytics", tw: "研究歷程分析" },
+    theme: { en: "Theme", tw: "主題" },
+    nextPage: { en: "Next Page", tw: "下一頁" },
+    prevPage: { en: "Previous Page", tw: "上一頁" },
+    highlights: { en: "Strategic Highlights", tw: "策略核心亮點" },
+    description: { en: "Detailed Analysis", tw: "深度分析解說" },
+    flashcards: { en: "Concept Cards", tw: "核心概念卡片" },
+    wrapUp: { en: "Wrap-up", tw: "總結回顧" },
+    quiz: { en: "Knowledge Quiz", tw: "模組知識檢定" },
+    clicks: { en: "Clicks", tw: "點擊次數" },
+    shown: { en: "Shown", tw: "已顯示" },
+    total: { en: "Total", tw: "總計" },
+    correct: { en: "Correct", tw: "答對" },
+    answered: { en: "Answered", tw: "已答" },
+    retry: { en: "Retry", tw: "重新挑戰" },
+    next: { en: "Next", tw: "下一個" },
+    prev: { en: "Prev", tw: "上一個" },
+    exportCSV: { en: "Export CSV", tw: "匯出 CSV 研究記錄" },
+    group: { en: "Group (e.g. G1)", tw: "組別 (例: G1)" },
+    studentId: { en: "Student ID", tw: "學號" },
+    name: { en: "Name", tw: "姓名" },
+    timeSpent: { en: "Time Spent (s)", tw: "研究時間(秒)" },
+    cardRate: { en: "Card Reviewed", tw: "概念卡研究率" },
+    quizRate: { en: "Quiz Score", tw: "測驗答對率" },
+    resetData: { en: "Reset Data", tw: "重置記錄" }
+  },
+  OVERVIEW: {
+    title: { en: "Executive Summary", tw: "執行摘要" },
+    content: {
+      en: "Welcome to the Strategic Analysis Report of Hon Hai Technology Group (Foxconn). This comprehensive research platform dissects the strategic evolution of Foxconn, the undisputed global leader in Electronic Manufacturing Services (EMS). Through a systematic structural analysis rooted in strategic management frameworks (TP0 to TP3 modules), we critically evaluate Foxconn's macro-environmental challenges, resource orchestration, dynamic capabilities, and its corporate strategies, including upstream vertical integration and its ambitious '3+3+3' diversification strategy.\n\nFaced with a maturing smartphone market and intense geopolitical risks, Foxconn's management proactively initiated a profound transformation. The group is aggressively shifting its center of gravity towards AI servers and Electric Vehicles (EVs). In 2025, cloud and network products (driven by AI servers) surpassed consumer electronics to become the largest revenue contributor (40%). Concurrently, Foxconn is building the MIH open platform and pursuing a CDMS (Contract Design and Manufacturing Service) model to disrupt the traditional automotive industry.\n\nThis research platform encapsulates these strategic maneuvers into seven core analytical themes. It features interactive concept cards, situational knowledge quizzes, and a dynamic management lab to help researchers internalize complex business strategy theories. By navigating through this report, researchers will gain profound insights into how a global manufacturing titan overcomes organizational inertia, navigates the China+1 global supply chain shifts, and transforms from a traditional contract manufacturer into a comprehensive 'Tech Manufacturing Platform Service Company'.",
+      tw: "歡迎來到「鴻海科技集團 (Foxconn) 企業策略綜合分析報告」。本研究平台旨在深度剖析全球電子代工服務 (EMS) 龍頭——鴻海的策略演進軌跡。透過嚴謹的商管策略架構（TP0 至 TP3 模組），我們將系統化地檢視鴻海面臨的總體環境挑戰、產業競合動態、內部資源盤點、動態能力展現，以及其包含向上游垂直整合與非相關多角化（如 3+3+3 策略）的集團層級策略。\n\n近年來，面對傳統智慧型手機市場的飽和以及嚴峻的地緣政治風險（如中美科技戰），鴻海經營階層並未坐以待斃，而是極具前瞻性地啟動了深度的轉型策略。集團正將重心猛烈轉向「AI 伺服器」與「電動車 (EV)」兩大新興領域。2025 年，受惠於全球算力需求的爆發，鴻海的雲端網路產品營收首次超越消費智能產品，佔比達 40%，成為最大成長引擎。同時，鴻海正透過 MIH 開放平台與 CDMS（委託設計與製造服務）模式，試圖顛覆傳統汽車產業的封閉供應鏈。\n\n本報告將鴻海的策略軌跡萃取為七大核心主題，並內建互動式概念卡片、情境檢定與動態高階管理研究室，協助研究者將生硬的商管策略理論轉化為實務分析底蘊。透過本研究平台的引導，您將深刻理解一家擁有百萬員工的製造巨頭如何克服組織慣性、應對「中國加一 (China+1)」的全球供應鏈重組，並成功從純硬體代工廠，蛻變為提供全方位解決方案的「科技製造平台服務公司」。"
+    }
+  },
+  THEMES: [
+    {
+      id: 1,
+      icon: IconBookOpen,
+      title: { en: "1. Corporate Profile & 3+3+3 Strategy", tw: "1. 企業概況與 3+3+3 轉型策略" },
+      highlights: { 
+        en: ["From EMS Giant to Tech Platform", "AI Servers as Growth Engine", "The 3+3+3 Diversification Strategy"], 
+        tw: ["從 EMS 代工巨頭轉型科技平台", "AI 伺服器成為最大營收動能", "3+3+3 大規模多角化策略"]
+      },
+      description: {
+        en: "Founded in 1974 by Terry Gou, Hon Hai (Foxconn) evolved from producing TV knobs to becoming the world's largest Electronic Manufacturing Services (EMS) provider, commanding over 40% of the global market share. For decades, Foxconn's growth was fueled by the booming consumer electronics sector, particularly its symbiotic relationship with Apple. However, the traditional smartphone market has entered maturity, leading to growth bottlenecks and margin compression.\n\nTo break through this ceiling, Foxconn initiated the visionary '3+3+3' transformation strategy under Chairman Young Liu. The strategy targets three emerging industries: Electric Vehicles (EV), Digital Health, and Robotics, powered by three core technologies: AI, Semiconductors, and Next-Gen Communications. These are further integrated into three smart platforms: Smart Manufacturing, Smart EV, and Smart City. This represents a massive 'Unrelated Diversification' effort aimed at securing higher-margin revenue streams.\n\nThe results of this pivot are already materializing. Driven by the generative AI boom, Foxconn's Cloud and Networking products (heavily dominated by AI servers) accounted for 40% of total revenue in 2025, surpassing consumer electronics for the first time. The company is actively investing in AI server capacity in Wisconsin and Texas to serve North American CSPs (Cloud Service Providers). In the EV sector, despite challenges, Foxconn is pushing its CDMS (Contract Design and Manufacturing Service) model and MIH open platform, aiming to become the 'Android of the EV industry'.",
+        tw: "鴻海科技集團由郭台銘先生於 1974 年創立，從初期生產黑白電視機旋鈕起家，憑藉卓越的執行力，一路發展為全球最大的電子代工服務 (EMS) 廠商，掌握全球超過四成的市佔率。過去數十年，鴻海的爆發性成長高度仰賴消費性電子（尤其是與 Apple 的深度綁定）。然而，隨著傳統智慧型手機市場步入成熟期，集團面臨了營收成長趨緩與毛利率壓縮的嚴峻瓶頸。\n\n為了突破這道成長天花板，在劉揚偉董事長的帶領下，鴻海啟動了極具野心的「3+3+3」轉型策略。此策略瞄準三大新興產業（電動車、數位健康、機器人），並由三項核心新技術（人工智慧、半導體、新世代通訊技術）驅動，最終建構於三大智慧平台（智慧製造、智慧電動車、智慧城市）之上。這是一場規模空前的「非相關多角化」戰役，旨在擺脫低毛利代工，跨入高附加價值的藍海市場。\n\n這場策略轉型的成效已在財報中具體顯現。受惠於生成式 AI 帶動的龐大算力需求，2025 年鴻海的「雲端網路產品」（以 AI 伺服器為核心）營收佔比達到 40%，史上首次超越「消費智能產品」，成為集團最大的營收支柱。為就近服務北美大型雲端服務供應商 (CSP)，鴻海正大舉加碼投資美國威斯康辛州與德州的 AI 伺服器產能。而在電動車領域，儘管面臨重重挑戰，鴻海仍堅定推動其 CDMS（委託設計與製造服務）模式與 MIH 開放平台，誓言成為「電動車界的安卓 (Android)」。"
+      },
+      wrapUp: {
+        en: "Foxconn's 3+3+3 strategy is a textbook response to a maturing core business: leveraging its massive capital and manufacturing expertise to aggressively diversify into high-growth, high-margin sectors like AI and EVs.",
+        tw: "鴻海的 3+3+3 策略是應對成熟本業的教科書級示範：利用其龐大的資本與製造底蘊，猛烈地進行多角化佈局，全面跨入具備高成長與高毛利的 AI 與電動車新興市場。"
+      },
+      cards: [
+        { term: {en:"EMS", tw:"EMS (電子製造服務)"}, def: {en:"Companies that design, manufacture, test, distribute, and provide return/repair services for electronic components and assemblies.", tw:"為電子產品品牌商提供設計、製造、測試、物流與維修等全方位服務的委託代工模式，鴻海為此領域的全球霸主。"} },
+        { term: {en:"3+3+3 Strategy", tw:"3+3+3 轉型策略"}, def: {en:"Foxconn's pivot: 3 emerging industries (EV, Health, Robotics), 3 technologies (AI, Semi, Comms), and 3 platforms (Mfg, EV, City).", tw:"鴻海的轉型藍圖：聚焦 3 大新興產業、深耕 3 項新技術，並建構 3 大智慧平台，推動集團邁向高毛利領域。"} },
+        { term: {en:"CDMS Model", tw:"CDMS (委託設計製造服務)"}, def: {en:"Contract Design and Manufacturing Service; Foxconn's approach to the EV market, offering end-to-end vehicle development for brands.", tw:"委託設計與製造服務；鴻海進軍電動車市場的核心商業模式，為車廠客戶提供從底盤設計到整車組裝的一站式服務。"} },
+        { term: {en:"MIH Open Platform", tw:"MIH 開放平台"}, def: {en:"An open EV ecosystem initiated by Foxconn to standardize software/hardware interfaces, lowering barriers for EV development.", tw:"由鴻海主導建立的電動車軟硬體開放平台，旨在標準化介面、打破傳統車廠封閉供應鏈，大幅降低電動車的開發門檻。"} }
+      ],
+      quizzes: [
+        { q: {en: "In 2025, which product category surpassed consumer electronics to become Foxconn's largest revenue contributor?", tw: "在 2025 年，鴻海哪一項產品類別的營收首次超越了傳統的消費智能產品（如手機），成為最大營收來源？"}, options: {en: ["Digital Health Devices", "Cloud and Networking Products (AI Servers)", "Electric Vehicles (EV)", "Robotics components"], tw: ["數位健康醫療設備", "雲端網路產品 (以 AI 伺服器為主)", "電動車整車與零組件", "人形機器人關節元件"]}, ans: 1 },
+        { q: {en: "Foxconn's '3+3+3' strategy represents what type of corporate expansion?", tw: "鴻海大舉跨足電動車與數位健康的「3+3+3」策略，在企業擴張理論中主要屬於何種類型？"}, options: {en: ["Horizontal Integration", "Downstream Vertical Integration", "Unrelated Diversification", "Market Penetration"], tw: ["水平整合 (Horizontal Integration)", "向下游垂直整合 (Downstream Integration)", "非相關多角化 (Unrelated Diversification)", "市場滲透 (Market Penetration)"]}, ans: 2 },
+        { q: {en: "What is the primary goal of the MIH platform in the EV industry?", tw: "鴻海推動「MIH 開放平台」在電動車產業中的最主要策略目標為何？"}, options: {en: ["To build highly secretive, proprietary systems", "To standardize interfaces and build an open EV ecosystem", "To exclusively sell Foxconn-branded cars", "To eliminate all automotive software"], tw: ["建立極度機密且封閉的專屬系統", "標準化軟硬體介面並建立開放的電動車生態系", "為了獨家販售掛著鴻海自有品牌的汽車", "為了徹底消滅汽車產業中的所有軟體應用"]}, ans: 1 },
+        { q: {en: "What is a major macroeconomic factor driving Foxconn's expansion of AI server plants in the US?", tw: "促使鴻海在美國威斯康辛州與德州大舉擴建 AI 伺服器產能的總體經濟因素為何？"}, options: {en: ["Cheaper labor costs in the US", "Geopolitical risks, US manufacturing policies, and proximity to CSP clients", "A shortage of land in Taiwan", "A ban on AI servers in Asia"], tw: ["因為美國本土的基層勞動力成本極為低廉", "地緣政治風險、美國製造政策，以及就近服務大型 CSP 客戶", "因為台灣本土已經面臨嚴重的工業用地短缺", "因為亞洲各國政府全面立法禁止生產 AI 伺服器"]}, ans: 1 }
+      ]
+    },
+    {
+      id: 2,
+      icon: IconGlobe,
+      title: { en: "2. Macro Environment Analysis (PESTEL)", tw: "2. 總體環境分析 (PESTEL 構面)" },
+      highlights: { 
+        en: ["Geopolitical De-risking (China+1)", "Gen-AI Computing Demand", "Net Zero & Supply Chain Decarbonization"], 
+        tw: ["地緣政治避險與 China+1", "生成式 AI 引爆算力革命", "淨零碳排與供應鏈深度減碳"]
+      },
+      description: {
+        en: "Analyzing Foxconn through the PESTEL framework reveals immense external forces reshaping its trajectory. Politically, escalating US-China tech wars and 'Made in America' policies mandate a massive supply chain de-risking. The era of concentrating 90% of production in China is over. Foxconn must execute a complex 'China+1' or 'Regionalization' strategy, evidenced by its heavy CapEx in Wisconsin and Texas for AI servers, and Ohio for EV assembly. These moves satisfy political mandates while mitigating devastating tariff risks.\n\nTechnologically, the advent of Generative AI and Large Language Models (LLMs) has triggered an insatiable demand for computing power. This technological wave is the primary catalyst for Foxconn's surging Cloud and Networking revenue. Simultaneously, the global transition to electric mobility represents a technological paradigm shift that Foxconn seeks to exploit via its MIH platform, moving from mechanical combustion to software-defined vehicles.\n\nEnvironmentally, corporate sustainability is now a strict business requirement, not an option. Global mandates for Net Zero by 2050, combined with Europe's Carbon Border Adjustment Mechanism (CBAM), exert intense pressure. Foxconn has committed to 100% green power usage by 2040 and is rigorously implementing Greenhouse Gas inventories (ISO 14064-1) across its sprawling Asian supply chain. Decarbonizing a trillion-NTD manufacturing network while preserving cost efficiency is arguably Foxconn's most formidable macro-environmental challenge for the next decade.",
+        tw: "透過 PESTEL 構面剖析，可見巨大的外部力量正強力重塑鴻海的發展軌跡。在「政治 (Political)」構面，中美科技戰的急遽升溫與「美國製造」政策，迫使全球供應鏈必須進行深度的「去風險化 (De-risking)」。過去將 90% 產能集中於中國的時代已然終結，鴻海必須執行極度複雜的「China+1」與「供應鏈區域化」策略。其在美國威州與德州擴建 AI 伺服器產能、在俄亥俄州佈局電動車，不僅是為了迎合政治規範，更是為了抹除毀滅性的關稅與制裁風險。\n\n在「科技 (Technological)」構面，生成式 AI 與大型語言模型 (LLMs) 的問世，引爆了全球對高階算力永無止境的渴求。這股科技狂潮正是鴻海「雲端網路產品」營收暴衝的最核心催化劑。同時，全球向電動車世代的轉換，代表著從機械燃油轉向「軟體定義汽車」的科技典範轉移，而鴻海正試圖透過 MIH 開放平台搶佔此一歷史機遇。\n\n在「環境 (Environmental)」構面，企業永續經營已從公關層次升級為搶奪國際訂單的生死紅線。面對 2050 淨零碳排的全球共識，以及歐洲「碳邊境調整機制 (CBAM)」的兵臨城下，鴻海已立下軍令狀：承諾 2040 年達成 100% 全面使用綠電。集團正針對其橫跨亞洲的龐大供應鏈鐵腕實施溫室氣體盤查 (ISO 14064-1)。如何在維持極致成本優勢的同時，成功推動這條兆元級供應鏈的深度減碳，無疑是鴻海未來十年最艱鉅的總體環境挑戰。"
+      },
+      wrapUp: {
+        en: "Macro shifts are relentless; Foxconn's survival relies on transforming political friction into regionalized resilience, and climate mandates into a sustainable competitive advantage.",
+        tw: "總體環境的變遷冷酷無情；鴻海的永續霸業，端賴於其能否將政治衝突轉化為區域化韌性，並將嚴苛的氣候法規淬鍊為其無可取代的競爭優勢。"
+      },
+      cards: [
+        { term: {en:"De-risking (China+1)", tw:"去風險化 (China+1 策略)"}, def: {en:"Diversifying supply chains away from a single country (China) to multiple regions (US, Vietnam, India) to mitigate geopolitical and tariff risks.", tw:"為規避單一國家（中國）的地緣政治與關稅風險，將供應鏈大舉分散至美、越、印等多國的戰略性產能轉移佈局。"} },
+        { term: {en:"Generative AI & LLMs", tw:"生成式 AI 與 LLMs"}, def: {en:"Advanced AI models requiring massive computational power, directly driving the explosive demand for Foxconn's high-margin AI servers.", tw:"需要極度龐大算力支撐的先進 AI 模型，這股科技巨浪直接引爆了對鴻海高毛利 AI 伺服器的海量需求。"} },
+        { term: {en:"CBAM", tw:"碳邊境調整機制 (CBAM)"}, def: {en:"The EU's carbon tariff on imported goods, forcing manufacturers like Foxconn to aggressively decarbonize their entire supply chain.", tw:"歐盟針對高碳排進口產品徵收的碳關稅機制，這股外部法規壓力正迫使如鴻海等跨國製造巨頭必須加速全供應鏈的深度減碳。"} },
+        { term: {en:"Software-Defined Vehicle", tw:"軟體定義汽車 (SDV)"}, def: {en:"A paradigm shift where vehicle value/features are dictated by software updates rather than just mechanical hardware, a core focus of MIH.", tw:"汽車的價值與功能將主要由軟體更新來定義，而非傳統的機械硬體。這是汽車產業的科技典範轉移，也是 MIH 平台的核心願景。"} }
+      ],
+      quizzes: [
+        { q: {en: "In the PESTEL framework, US-China tensions forcing Foxconn to expand in the US and Vietnam falls under which category?", tw: "在 PESTEL 構面中，中美緊張局勢迫使鴻海必須前往美國與越南擴廠，這最主要屬於哪一個環境因素的衝擊？"}, options: {en: ["Technological", "Political", "Environmental", "Sociocultural"], tw: ["科技環境 (Technological)", "政治環境 (Political)", "自然環境 (Environmental)", "社會文化環境 (Sociocultural)"]}, ans: 1 },
+        { q: {en: "What technological shift is directly responsible for Foxconn's cloud and networking revenue surpassing consumer electronics?", tw: "下列哪一項「科技構面」的典範轉移，直接促使鴻海的雲端網路產品營收史上首次超越了消費智能產品？"}, options: {en: ["The invention of 3D printing", "The explosive demand for computing power driven by Generative AI", "The decline of desktop computers", "The transition to 4G networks"], tw: ["3D 列印技術的普及與發明", "由生成式 AI 所引爆的全球高階算力海量需求", "傳統桌上型電腦市場的急速衰退", "全球電信網路從 3G 轉換至 4G"]}, ans: 1 },
+        { q: {en: "To address 'Environmental' pressures like CBAM, what specific standard is Foxconn implementing across its Asian supply chain?", tw: "為了因應 CBAM 等「環境構面」的嚴苛壓力，鴻海正積極針對其亞洲供應鏈導入哪一項國際標準？"}, options: {en: ["ISO 9001 (Quality)", "ISO 14064-1 (Greenhouse Gas Inventory)", "ISO 27001 (Information Security)", "ISO 45001 (Occupational Health)"], tw: ["ISO 9001 品質管理系統", "ISO 14064-1 溫室氣體盤查系統", "ISO 27001 資訊安全管理系統", "ISO 45001 職業安全衛生管理系統"]}, ans: 1 },
+        { q: {en: "Why is 'De-risking' critical for Foxconn's current macro strategy?", tw: "為何「去風險化 (De-risking)」對鴻海當前的總體戰略至關重要？"}, options: {en: ["To reduce the salaries of top executives", "To avoid devastating operational halts and tariffs caused by over-reliance on a single geopolitical region", "To intentionally slow down production speeds", "To completely exit the electronics manufacturing industry"], tw: ["純粹為了大幅削減集團高階主管的年度薪資", "為了避免過度依賴單一地緣政治區域，所可能引發的毀滅性斷鏈與關稅制裁", "為了刻意放慢整體的生產速度以提升產品良率", "為了讓集團有藉口徹底退出電子製造產業"]}, ans: 1 }
+      ]
+    },
+    {
+      id: 3,
+      icon: IconActivity,
+      title: { en: "3. Industry & Competitive Dynamics", tw: "3. 產業競合分析 (五力與動態)" },
+      highlights: { 
+        en: ["Multiple Industry Life Cycles", "Porter's Five Forces Assessment", "Asymmetric Competitors (Tesla/BYD)"], 
+        tw: ["跨越多重產業生命週期", "波特五力分析：抵抗買方與同業", "不對稱競爭者 (Tesla/比亞迪)"]
+      },
+      description: {
+        en: "Foxconn's massive scale means it operates across multiple Industry Life Cycles simultaneously. The traditional EMS smartphone market is in a 'Mature' stage, characterized by saturated growth and brutal price wars. Conversely, AI Servers are in an 'Explosive Growth' phase, and the EV (CDMS) market is in an 'Early Growth' stage. Foxconn must balance these distinct dynamics to maintain profitability.\n\nApplying Porter's Five Forces reveals a highly challenging competitive landscape. 'Rivalry among Existing Competitors' is extremely high; peers like Quanta, Wistron, and Pegatron aggressively contest both traditional assembly and the lucrative AI server market. 'Bargaining Power of Buyers' is also extremely high. Foxconn relies heavily on a few mega-clients (like Apple and top-tier CSPs), who squeeze margins due to their immense volume leverage. 'Bargaining Power of Suppliers' is medium-to-high; dominant chipmakers (TSMC, NVIDIA) hold monopolistic control over critical components, limiting Foxconn's negotiating room.\n\nTo alter these oppressive industry forces, Foxconn's competitive dynamics are shifting. In EVs, it faces 'Asymmetric Competitors'—traditional automakers (Ford, GM) and aggressive new entrants (Tesla, BYD). Foxconn does not want to build its own car brand (which would trigger direct warfare); instead, it pushes the CDMS model and MIH platform. By positioning itself as a neutral, high-value ecosystem provider rather than just a parts assembler, Foxconn aims to elevate its standing in the value chain, increase switching costs for buyers, and mitigate the brutal rivalry inherent in the traditional EMS sector.",
+        tw: "由於鴻海的事業版圖極度龐大，其同時跨越了多重「產業生命週期」。傳統的智慧型手機 EMS 代工市場已步入「成熟期」，特徵是成長停滯與慘烈的削價競爭。相反地，AI 伺服器正處於「爆發性成長期」，而電動車 (CDMS 模式) 則處於「早期成長期」。鴻海必須精準平衡這些截然不同的產業動態，以維持集團總體獲利。\n\n透過「波特五力分析 (Porter's Five Forces)」剖析，可發現鴻海身處極度險惡的競合環境中。「現有競爭者威脅」極高；如廣達、緯創、和碩等強悍同業，不僅在傳統代工廝殺，更在利潤豐厚的 AI 伺服器市場展開肉搏戰。「買方議價能力」同樣極高；鴻海的營收高度集中於少數幾家超級巨頭（如 Apple 與頂級 CSP 業者），這些買方挾著海量訂單優勢，無情地壓縮代工毛利。此外，「供應商議價能力」偏向中高；在關鍵零組件（如高階晶片）上，台積電、NVIDIA 等供應商具備近乎壟斷的地位，鴻海的談判空間極度受限。\n\n為了扭轉這些壓迫性的產業力量，鴻海的競爭動態正在改變。在電動車領域，它面臨著「不對稱競爭者」——傳統車廠 (Ford、GM) 與兇猛的新創/轉型車廠 (Tesla、比亞迪)。鴻海極力避免推出自有汽車品牌（這將引發直接的毀滅性熱戰）；取而代之的是，它全力推動 CDMS 模式與 MIH 開放平台。透過將自身定位為中立且高附加價值的「生態系提供者」，而非單純的零件組裝廠，鴻海試圖大幅提升其在價值鏈中的策略地位，墊高買方的轉換成本，並藉此跳脫傳統 EMS 產業那毫無止境的殘酷紅海。"
+      },
+      wrapUp: {
+        en: "Trapped between powerful chip suppliers and margin-squeezing mega-buyers, Foxconn leverages its CDMS platform strategy to rewrite the rules of industry competition and escape the OEM margin trap.",
+        tw: "深陷於強勢晶片供應商與無情壓價超級買方的夾擊之中，鴻海正試圖透過 CDMS 平台策略，強勢改寫產業的競合規則，徹底逃離傳統代工的低毛利陷阱。"
+      },
+      cards: [
+        { term: {en:"Porter's Five Forces", tw:"波特五力分析"}, def: {en:"A framework analyzing industry competition: Rivalry, Supplier Power, Buyer Power, Threat of Substitution, and Threat of New Entry.", tw:"分析產業競爭態勢的經典架構，包含：現有競爭者、供應商議價力、買方議價力、替代品威脅、以及潛在進入者威脅。"} },
+        { term: {en:"High Buyer Power", tw:"高買方議價能力"}, def: {en:"When a few large clients (like Apple or top CSPs) account for most revenue, allowing them to dictate low prices and squeeze margins.", tw:"當企業絕大部分的營收極度仰賴少數幾家超級巨頭（如 Apple 或頂級 CSP）時，買方將能輕易壓低報價、無情壓縮代工毛利。"} },
+        { term: {en:"Asymmetric Competitors", tw:"不對稱競爭者"}, def: {en:"Firms competing for the same profit pool but using entirely different business models (e.g., Foxconn's CDMS vs. Tesla's direct sales).", tw:"瞄準同一個產業利潤池，卻採取截然不同商業模式的競爭對手（例如鴻海的 CDMS 代工模式對決 Tesla 的直營品牌模式）。"} },
+        { term: {en:"Industry Life Cycle", tw:"產業生命週期"}, def: {en:"The stages an industry goes through: Introduction, Growth, Maturity, and Decline. Foxconn manages portfolios across different stages.", tw:"產業發展必經的四個階段：導入、成長、成熟與衰退。鴻海的挑戰在於必須同時管理橫跨不同生命週期的龐大事業群。"} }
+      ],
+      quizzes: [
+        { q: {en: "According to the Five Forces analysis, why does Foxconn face 'High Buyer Power'?", tw: "依據波特五力分析，為何鴻海會面臨「極高的買方議價能力」？"}, options: {en: ["Because it has millions of individual retail customers", "Because its revenue is heavily concentrated among a few mega-clients who can demand lower margins", "Because no one wants to buy electronics anymore", "Because Foxconn holds a monopoly over the smartphone market"], tw: ["因為鴻海在全球擁有數千萬名零散的個人終端消費者", "因為其營收極度集中於少數幾家超級巨頭，這些買方能輕易挾量砍價、壓縮毛利", "因為現在全球市場上已經完全沒有人想買電子產品了", "因為鴻海已經在全球智慧型手機市場取得了絕對的壟斷地位"]}, ans: 1 },
+        { q: {en: "Which of the following represents an 'Asymmetric Competitor' to Foxconn's EV ambitions?", tw: "在鴻海的電動車 (EV) 野心中，下列何者代表了其遭遇的「不對稱競爭者」？"}, options: {en: ["Pegatron and Wistron", "Tesla and BYD", "TSMC and NVIDIA", "Local convenience stores"], tw: ["和碩與緯創 (同為傳統 EMS 代工廠)", "Tesla 與比亞迪 (採取整車品牌直營模式的車廠)", "台積電與 NVIDIA (上游晶片供應商)", "各地的連鎖便利商店"]}, ans: 1 },
+        { q: {en: "How is Foxconn attempting to alter the intense rivalry and low margins of the EMS industry?", tw: "鴻海正試圖透過何種策略，來扭轉傳統 EMS 產業中競爭極度激烈且毛利低落的困境？"}, options: {en: ["By positioning itself as a neutral, high-value ecosystem provider via the CDMS model", "By lowering its assembly prices even further to bankrupt competitors", "By suing all of its competitors", "By intentionally producing defective products to reduce material costs"], tw: ["透過推動 CDMS 模式，將自身重新定位為中立且具備高附加價值的「生態系提供者」", "透過無底線地繼續調降組裝報價，直到所有的競爭對手都破產倒閉為止", "透過跨國訴訟對所有的競爭對手提出專利侵權控告", "透過刻意製造充滿瑕疵的劣質產品，以極限降低原物料的採購成本"]}, ans: 0 },
+        { q: {en: "In terms of Industry Life Cycle, how do Smartphones and AI Servers compare for Foxconn?", tw: "就「產業生命週期」而言，智慧型手機與 AI 伺服器對鴻海來說分別處於何種階段？"}, options: {en: ["Both are in the Introduction phase", "Smartphones are 'Mature', while AI Servers are in 'Explosive Growth'", "Smartphones are in 'Explosive Growth', while AI Servers are in 'Decline'", "Both are completely extinct"], tw: ["兩者目前都正處於市場的「導入期」", "智慧型手機已處於「成熟期」，而 AI 伺服器正處於「爆發性成長期」", "智慧型手機正處於「爆發性成長期」，而 AI 伺服器已經邁入「衰退期」", "這兩種產業在地球上都已經徹底滅絕了"]}, ans: 1 }
+      ]
+    },
+    {
+      id: 4,
+      icon: IconLayers,
+      title: { en: "4. Value Chain & Organizational Structure", tw: "4. 價值活動鏈與組織架構" },
+      highlights: { 
+        en: ["Multi-divisional Structure (6 BGs)", "Integrating Semiconductors (S Group)", "From Linear Chain to Ecosystem"], 
+        tw: ["多事業群架構 (6大事業群分工)", "深度佈局半導體 (S事業群)", "從線性價值鏈走向生態系"]
+      },
+      description: {
+        en: "To execute its transformation, Foxconn overhauled its organizational design, moving from 12 sub-groups to a more focused multi-divisional structure comprising 6 major Business Groups (A, B, C, E, S, etc.). This structure is tailored by product and industry. For instance, the 'A Group' handles smartphones, while the newer 'C Group' is dedicated to EV powertrains, and the 'S Group' focuses on semiconductor manufacturing. This functional separation allows for agility in highly distinct markets. To groom future leaders and prevent management silos, Foxconn implemented a rotating CEO system among these group heads.\n\nAnalyzing Foxconn's Value Chain reveals a shift from pure manufacturing to end-to-end platform services. In Inbound Logistics, Foxconn leverages its massive global procurement power. Crucially, the S Group (Semiconductors) represents an aggressive upstream integration to secure critical chips, mitigating the supplier bargaining power of giants like TSMC or NVIDIA. In Operations, Foxconn is deploying 'Lighthouse Factories' globally, utilizing AI and smart manufacturing to crush costs and ensure extreme precision for high-margin AI servers and EVs.\n\nFurthermore, Foxconn's value creation is evolving from a linear chain to a complex ecosystem network. The MIH EV platform exemplifies this. Instead of a traditional sequential process (design -> source -> build), Foxconn orchestrates an ecosystem of software developers, battery makers, and legacy auto-parts suppliers. By controlling the platform architecture, Foxconn positions itself at the center of the profit pool, shifting its value proposition from 'low-cost assembly' to 'integrated tech solutions'.",
+        tw: "為了有效執行其龐大的轉型藍圖，鴻海對組織設計進行了深度重整，將原先的 12 個次集團精簡為 6 大事業群 (Business Groups: A, B, C, E, S 等)。這種依產品與產業劃分的「多事業單位」架構，賦予了組織極高的靈活性。例如，A 事業群專注於智慧型手機；新設立的 C 事業群專攻電動車動力系統；而 S 事業群則全力佈局半導體製造。為了打破部門穀倉效應並培養具備全局觀的接班人，集團更前瞻性地導入了由各事業群總經理擔綱的「輪值 CEO 制度」。\n\n深入剖析鴻海的價值鏈，可發現其正從純粹的線性代工，向端到端的平台服務演進。在「進料後勤」上，鴻海除了發揮全球採購的極致規模經濟外，S 事業群（半導體）的存在，代表了強烈的「向上游垂直整合」企圖心。透過掌握關鍵晶片與封測能力，鴻海試圖降低對外部晶片巨頭的依賴，並削弱供應商的議價能力。在「生產營運」方面，鴻海正向全球大舉擴建「燈塔工廠 (Lighthouse Factories)」，全面導入 AI 與智慧製造，以確保在高毛利的 AI 伺服器與電動車生產中，達成極致的成本控制與微米級精密度。\n\n更深層地看，鴻海的價值創造模式正從傳統的「線性價值鏈」蛻變為複雜的「生態系網絡」。電動車的 MIH 平台即是最佳例證。鴻海不再侷限於傳統的「接單-採購-組裝」直線流程，而是扮演「生態系協調者 (Orchestrator)」的角色，匯聚了軟體開發商、電池廠與傳統車用零組件供應商。透過掌握平台架構的話語權，鴻海將自己置於未來利潤池的核心，將其價值主張從「低成本組裝」徹底升級為「整合型科技解決方案」。"
+      },
+      wrapUp: {
+        en: "Foxconn's structural evolution from a monolithic assembler to a multi-divisional ecosystem orchestrator ensures it can simultaneously milk its consumer electronics Cash Cow while aggressively nurturing its AI and EV Stars.",
+        tw: "鴻海從單一組裝廠向多事業群生態系協調者的結構演進，確保了它能同時從消費性電子「金牛」中穩定榨取現金，並猛烈地扶植 AI 與電動車等未來的「明星」事業。"
+      },
+      cards: [
+        { term: {en:"Multi-divisional Structure", tw:"多事業群架構 (M-Form)"}, def: {en:"Organizing a company into semi-autonomous divisions by product/market, allowing focused agility (e.g., Foxconn's 6 BGs).", tw:"按產品或市場將企業劃分為多個半自治事業部的組織架構，賦予各領域極高的決策靈活度（如鴻海的 6 大事業群）。"} },
+        { term: {en:"Lighthouse Factory", tw:"燈塔工廠"}, def: {en:"Highly advanced manufacturing facilities recognized by the WEF for deploying Fourth Industrial Revolution tech like AI and IoT.", tw:"獲世界經濟論壇 (WEF) 認可，大規模導入 AI、物聯網等第四次工業革命技術的極致先進智慧製造工廠。"} },
+        { term: {en:"Ecosystem Orchestrator", tw:"生態系協調者"}, def: {en:"A firm that organizes a network of partners (like the MIH platform) to create value, moving away from linear supply chains.", tw:"跳脫傳統線性供應鏈，透過建立平台（如 MIH）來組織並協調龐大合作夥伴網絡，共同創造價值的企業角色。"} },
+        { term: {en:"Rotating CEO", tw:"輪值 CEO 制度"}, def: {en:"A governance mechanism where top executives take turns acting as CEO, preventing silos and grooming well-rounded successors.", tw:"高階主管輪流擔任執行長的治理機制，旨在打破部門本位主義、促進跨域視野，並為集團培養全方位的接班梯隊。"} }
+      ],
+      quizzes: [
+        { q: {en: "What is the strategic purpose of Foxconn's 'S Group' (Semiconductor Group) within its value chain?", tw: "在鴻海的價值鏈中，設立「S 事業群 (半導體)」的最主要策略目的為何？"}, options: {en: ["To outsource all chip manufacturing to TSMC", "Upstream integration to secure critical components and mitigate supplier power", "To exit the electronics market entirely", "To focus solely on smartphone software"], tw: ["為了將所有的晶片製造環節全面委外給台積電", "向上游垂直整合，確保關鍵零組件供應並削弱供應商議價能力", "為了讓集團徹底退出所有的電子產品市場", "為了將資源全數集中於智慧型手機的軟體開發"]}, ans: 1 },
+        { q: {en: "How does the MIH platform change Foxconn's value creation model?", tw: "MIH 開放平台如何改變了鴻海傳統的價值創造模式？"}, options: {en: ["It shifts the model from a linear supply chain to an ecosystem network", "It strictly limits Foxconn to only assembling tires", "It forces Foxconn to build smaller factories", "It eliminates the need for any software"], tw: ["將營運模式從傳統的單一線性供應鏈，昇華為複雜的生態系網絡", "將鴻海的業務嚴格限縮在只能從事汽車輪胎的組裝", "迫使鴻海必須拆除現有廠房並建立更小型的工廠", "讓電動車的製造完全不需要任何軟體程式的輔助"]}, ans: 0 },
+        { q: {en: "Why did Foxconn implement a 'Rotating CEO' system?", tw: "鴻海導入「輪值 CEO 制度」的最主要內部管理考量為何？"}, options: {en: ["Because no one wanted the job permanently", "To prevent management silos and groom future leaders with a holistic view", "To confuse competitors about who is in charge", "To reduce the CEO's salary budget"], tw: ["因為集團內部沒有人願意長期擔任這個職位", "為了打破部門本位主義 (Silos)，並培養具備全局觀的未來接班人", "為了讓競爭對手搞不清楚到底誰才是真正的決策者", "純粹為了大幅削減執行長的年度薪資預算"]}, ans: 1 },
+        { q: {en: "In Porter's Value Chain, deploying 'Lighthouse Factories' primarily optimizes which activity?", tw: "在波特的價值鏈分析中，鴻海大舉佈建「燈塔工廠」主要是為了極度優化哪一項主要活動？"}, options: {en: ["Inbound Logistics (Raw Materials)", "Operations (Manufacturing efficiency and precision)", "Marketing and Sales", "After-Sales Service"], tw: ["進料後勤 (基礎原物料的採購與儲存)", "生產營運 (極致提升製造效率、降低成本與微米級精密度)", "行銷與銷售 (廣告投放與終端推廣)", "售後服務 (客服中心與產品維修)"]}, ans: 1 }
+      ]
+    },
+    {
+      id: 5,
+      icon: IconTarget,
+      title: { en: "5. VRIN Resources & Dynamic Capabilities", tw: "5. VRIN 核心能耐與動態能力" },
+      highlights: { 
+        en: ["VRIN: Global Manufacturing Scale", "Social Complexity with Top Brands", "Sensing & Seizing the AI Era"], 
+        tw: ["VRIN: 全球級的極致製造規模", "與頂級品牌的社會複雜性", "感知並果斷掌握 AI 大爆發"]
+      },
+      description: {
+        en: "Applying the VRIN framework evaluates whether Foxconn's resources yield a sustainable competitive advantage. Foxconn's most critical core competency is its 'ultra-efficient global manufacturing and supply chain integration scale'. This is 'Valuable' as it crushes costs and meets massive volume demands. It is 'Rare', as no other EMS provider matches its trillion-NTD scale. Crucially, it is 'Inimitable' due to Historical Path Dependence and 'Social Complexity'. Outsiders cannot easily replicate the tacit knowledge, robust supply networks, and deep-rooted trust Foxconn has built with top-tier clients (like Apple and NVIDIA) over 50 years. This ecosystem of trust is causally ambiguous—competitors can buy the same robots, but they cannot buy the relationship.\n\nHowever, static resources inevitably depreciate. Foxconn's survival relies heavily on 'Dynamic Capabilities' (David Teece's framework). First, Foxconn excelled in 'Sensing'. Management accurately perceived the growth limits of the smartphone era and sharply identified the explosive macroeconomic shift towards Generative AI and electric mobility.\n\nSecond, Foxconn acted rapidly in 'Seizing' these opportunities. It didn't just plan organically; it executed massive capital expenditures to build AI server plants in the US and Vietnam to capture North American CSP orders immediately. In EVs, it acquired a stake in ZF Chassis Modules to instantly gain critical auto-parts capabilities. Finally, Foxconn is actively 'Transforming'. The 'Foxconn 3.0' roadmap represents a fundamental reconfiguration of its internal DNA—shifting resources from legacy assembly to advanced semiconductor R&D, overcoming the severe 'Organizational Inertia' typical of a mature manufacturing giant.",
+        tw: "透過 VRIN 分析架構，我們能精準評估鴻海的資源是否具備永續的競爭優勢。鴻海最致命的核心能耐在於其「超高效率的全球化製造與供應鏈整合規模」。此能力具備極高的「價值性 (Valuable)」，能極限壓縮成本並滿足海量訂單。它同樣具備「稀少性 (Rare)」，全球幾乎找不到具備同等兆元級規模的 EMS 廠。最關鍵的是，它「難以模仿 (Inimitable)」——這歸功於歷史的路徑依賴與「社會複雜性 (Social Complexity)」。競爭者無法輕易複製鴻海 50 年來與頂級客戶（如 Apple、NVIDIA）所建立的隱性知識、強悍的供應商網絡與深不見底的信任基礎。這種信任生態系具有因果模糊性：對手可以買到相同的自動化機器人，但絕對買不到那份策略互信。\n\n然而，靜態資源終將隨時間折舊。鴻海的長盛不衰高度仰賴其強悍的「動態能力 (Dynamic Capabilities)」。首先在「感知 (Sensing)」階段，經營階層極度敏銳地察覺到智慧型手機時代的成長極限，並準確洞悉了生成式 AI 與電動車浪潮的總經大爆發。\n\n其次，鴻海在「掌握 (Seizing)」機會上展現了驚人的決斷力。它沒有選擇緩慢的內部研發，而是立刻投入巨額資本支出，在美國與越南火速擴建 AI 伺服器廠，以瞬間攔截北美大型 CSP 的海量訂單；在電動車領域，更直接收購德國 ZF 集團的底盤模組股權，瞬間獲取關鍵車用技術。最後，鴻海正積極進行「重組 (Transforming)」。其「Foxconn 3.0」藍圖代表了對內部 DNA 的根本性重塑——將龐大資源從傳統的低毛利組裝，大舉轉移至前瞻的半導體與 AI 研發，強勢克服了成熟製造巨獸極易罹患的「組織慣性」。"
+      },
+      wrapUp: {
+        en: "Foxconn's unassailable manufacturing scale forms its VRIN moat, but its dynamic ability to sense the AI/EV shift and reconfigure its assets prevents it from becoming a relic of the smartphone era.",
+        tw: "鴻海無可撼動的極致製造規模築起了它的 VRIN 護城河，但真正讓它免於淪為智慧型手機時代遺物的，是它能敏銳感知 AI/EV 趨勢並果斷重組龐大資產的動態能力。"
+      },
+      cards: [
+        { term: {en:"Social Complexity", tw:"社會複雜性"}, def: {en:"Deep trust, culture, and interpersonal relationships built with clients (like Apple/NVIDIA) over decades that competitors cannot buy.", tw:"歷經數十年與頂級客戶（如 Apple/NVIDIA）建立的深厚信任、默契與企業文化，這是競爭對手即使有錢也無法輕易買到或複製的模仿障礙。"} },
+        { term: {en:"Dynamic Capabilities", tw:"動態能力"}, def: {en:"The firm's ability to Sense, Seize, and Transform internal/external resources to address rapidly changing environments.", tw:"企業為因應快速變動的外部環境，持續「感知、掌握與重組」內外部資源與核心能耐的動態適應能力。"} },
+        { term: {en:"Seizing", tw:"掌握 (Seizing)"}, def: {en:"The rapid mobilization of resources (e.g., massive CapEx in US AI server plants) to capture a sensed market opportunity.", tw:"動態能力中的第二階段：企業在感知到市場機會後，迅速動員資源（如砸重金在美國擴建 AI 伺服器廠）以將機會轉化為實質獲利的決斷力。"} },
+        { term: {en:"Organizational Inertia", tw:"組織慣性"}, def: {en:"The dangerous tendency of a successful firm to stick to old habits (like traditional assembly), which Foxconn combats via transformation.", tw:"一家過去取得巨大成功的企業，其內部固執於既有成功模式與營運軌跡的危險傾向，鴻海正透過 3.0 轉型強力對抗此現象。"} }
+      ],
+      quizzes: [
+        { q: {en: "Why is Foxconn's global manufacturing integration considered 'Inimitable' in the VRIN framework?", tw: "在 VRIN 架構中，為何鴻海的全球製造整合能力被認為是「難以模仿 (Inimitable)」的？"}, options: {en: ["Because it holds a global patent on assembly lines", "Due to path dependence and complex social relationships built with top clients over 50 years", "Because the Taiwanese government forbids competitors from operating", "Because Foxconn hides its factories underground"], tw: ["因為鴻海擁有全球獨家且不可侵犯的組裝線專利", "歸功於長達 50 年的路徑依賴，以及與頂級客戶間極度複雜的社會信任網絡", "因為台灣政府立法嚴格禁止任何競爭對手從事相關業務", "因為鴻海的工廠全部隱藏在地下，競爭者無法觀察"]}, ans: 1 },
+        { q: {en: "Recognizing the growth limits of smartphones and identifying the Generative AI trend corresponds to which Dynamic Capability?", tw: "精準體認到智慧型手機成長停滯，並敏銳洞悉生成式 AI 的爆發趨勢，這對應了動態能力中的哪一個構面？"}, options: {en: ["Sensing", "Seizing", "Transforming", "Divesting"], tw: ["感知 (Sensing)", "掌握 (Seizing)", "重組 (Transforming)", "剝離 (Divesting)"]}, ans: 0 },
+        { q: {en: "Foxconn's massive capital expenditure to expand AI server production in Texas is an example of:", tw: "鴻海砸下巨額資本支出，火速在美國德州擴建 AI 伺服器產能，這是展現了下列何種能力？"}, options: {en: ["Organizational Inertia", "Seizing the opportunity", "Downstream vertical integration", "Asset liquidation"], tw: ["組織慣性 (Organizational Inertia)", "掌握機會 (Seizing the opportunity)", "向下游垂直整合 (Downstream vertical integration)", "資產清算 (Asset liquidation)"]}, ans: 1 },
+        { q: {en: "What internal barrier does Foxconn's 'Foxconn 3.0' transformation explicitly aim to overcome?", tw: "鴻海推動「Foxconn 3.0」的大規模轉型計畫，明確是為了克服下列哪一項內部管理的巨大障礙？"}, options: {en: ["Too much entrepreneurial spirit", "Organizational Inertia stemming from its legacy manufacturing success", "A severe lack of cash flow", "Employees adopting new technologies too quickly"], tw: ["集團內部的創業精神過度氾濫", "源自於過去傳統代工製造巨大成功所累積的「組織慣性」", "集團面臨極度嚴重的自由現金流枯竭問題", "基層員工適應新科技的速度實在太快導致管理失控"]}, ans: 1 }
+      ]
+    },
+    {
+      id: 6,
+      icon: IconShield,
+      title: { en: "6. Corporate Strategy: Integration & Diversification", tw: "6. 集團策略：垂直整合與多角化" },
+      highlights: { 
+        en: ["TCE in Semiconductor/Cooling", "Unrelated Diversification (EVs)", "BCG Matrix: Milking the Cow for Stars"], 
+        tw: ["半導體與散熱的 TCE 垂直整合", "跨足電動車的非相關多角化", "BCG 矩陣：汲取金牛以挹注明星"]
+      },
+      description: {
+        en: "At the Corporate Strategy level, Foxconn carefully defines the boundaries of its empire. In its high-growth AI Server business, Foxconn exhibits strong Upstream Vertical Integration. Analyzed through Transaction Cost Economics (TCE), critical AI components—such as advanced liquid cooling plates, manifolds, and custom silicon (via the S Group)—require extreme 'Asset Specificity'. Relying entirely on external suppliers for these custom, high-tech components in a volatile geopolitical climate creates a massive 'Hold-up Problem' (risk of supplier opportunism or disruption). By integrating upstream, Foxconn internalizes these high-frequency transactions, ensuring supply security, tight quality control, and superior margins compared to pure assembly.\n\nSimultaneously, Foxconn's foray into Electric Vehicles (EV) and Digital Health represents a bold 'Unrelated Diversification' strategy. The end-consumer markets for smartphones and EVs have almost zero overlap. The strategic logic is Risk Diversification—shielding the group from the cyclical stagnation of the consumer electronics market. However, there is a supply-side synergy: Foxconn aims to transfer its world-class precision manufacturing, supply chain management, and electronic component expertise to the automotive sector.\n\nApplying the BCG Growth-Share Matrix clarifies Foxconn's capital allocation: The traditional Smartphone assembly business is the ultimate 'Cash Cow'. It commands a dominant market share in a mature, slow-growing industry, generating massive free cash flow. The AI Server business is a 'Star'—enjoying high market share in an explosively growing market. The EV business remains a 'Question Mark'—operating in a high-growth market but currently holding a low relative market share. Foxconn's mandate is precise: ruthlessly milk the Smartphone Cash Cow to aggressively fund the massive R&D and CapEx required for the EV Question Mark, while defending the dominance of its AI Star.",
+        tw: "在集團層級策略上，鴻海極度謹慎地界定了其企業帝國的邊界。在爆發性成長的 AI 伺服器業務中，鴻海展現了強烈的「向上游垂直整合」企圖。透過「交易成本理論 (TCE)」來解析：AI 伺服器的關鍵零組件（如先進的液冷散熱水冷板、分岐管，以及 S 事業群的客製化晶片）具備極高的「資產專屬性」。在動盪的地緣政治環境下，若將這些高技術、客製化零件完全仰賴外部供應商，將面臨巨大的「套牢問題 (Hold-up Problem)」（供應商機會主義或斷鏈風險）。藉由向上游整合，鴻海將這些高頻率的交易內部化，不僅確保了供應安全與極致的品質控管，更攫取了遠高於純組裝的豐厚毛利。\n\n同時，鴻海大舉跨足電動車 (EV) 與數位健康領域，則是極度大膽的「非相關多角化」策略。智慧型手機與電動車的終端消費市場幾乎毫無重疊。此舉的策略邏輯在於「風險分散」——為集團打造能抵禦消費性電子景氣衰退的防護罩。然而，在供給面上仍存在綜效：鴻海試圖將其世界級的精密製造底蘊、供應鏈管理能力與強悍的電子零組件技術，強勢移植至傳統汽車產業中。\n\n套用「BCG 波士頓矩陣」能清晰透視鴻海的資本配置藍圖：傳統的智慧型手機代工事業是集團終極的「金牛 (Cash Cow)」。它在低成長的成熟市場中握有絕對領先的市佔率，持續噴發龐大的自由現金流。AI 伺服器業務則是光芒萬丈的「明星 (Star)」——在爆發成長的市場中擁有極高市佔。而電動車事業目前仍是「問號 (Question Mark)」——身處高成長市場，但全球相對市佔率仍低。鴻海的最高策略極為精確：無情地從手機金牛中汲取現金，猛烈地挹注於電動車問號事業所需的龐大研發與資本支出，同時誓死捍衛 AI 明星事業的霸主地位。"
+      },
+      wrapUp: {
+        en: "Foxconn uses vertical integration to protect its critical AI supply chain from hold-up risks, while employing unrelated diversification to transform smartphone cash into tomorrow's EV stars.",
+        tw: "鴻海靈活運用垂直整合來保護其關鍵的 AI 供應鏈免受套牢風險威脅，同時大膽採用非相關多角化，將智慧型手機榨出的現金轉化為明日的電動車明星。"
+      },
+      cards: [
+        { term: {en:"Asset Specificity", tw:"資產專屬性 (TCE)"}, def: {en:"Highly customized investments (like AI liquid cooling tech); high specificity increases outsourcing risks, driving vertical integration.", tw:"為特定產品量身打造的高技術投資（如 AI 液冷技術）；資產專屬性越高，委外代工的被套牢風險越大，進而強烈驅動垂直整合。"} },
+        { term: {en:"Hold-up Problem", tw:"套牢問題 (TCE)"}, def: {en:"The risk that an external supplier of a critical, specialized component might exploit their leverage to demand higher prices.", tw:"當企業過度依賴外部供應商提供極度專屬的關鍵零件時，供應商可能趁機敲竹槓、要求提高價格的巨大營運風險。"} },
+        { term: {en:"Cash Cow", tw:"金牛事業 (BCG)"}, def: {en:"High market share in a mature industry (e.g., smartphones). Its role is to generate cash to fund growth in other sectors.", tw:"在低成長的成熟產業中佔有極高市場份額的事業體（如智慧型手機代工）。其策略角色是源源不絕地產生現金，以供應集團擴張。"} },
+        { term: {en:"Question Mark", tw:"問號事業 (BCG)"}, def: {en:"A business in a high-growth market but with low market share (e.g., EVs). Requires massive investment to become a Star.", tw:"身處高成長市場但相對市佔率偏低的事業體（如電動車）。面臨激烈競爭，亟需集團挹注龐大資金才有可能轉型為明星事業。"} }
+      ],
+      quizzes: [
+        { q: {en: "Based on Transaction Cost Economics (TCE), why does Foxconn manufacture its own advanced AI liquid cooling plates?", tw: "依據交易成本理論 (TCE) 的觀點，鴻海為何選擇自行生產先進的 AI 伺服器液冷散熱水冷板？"}, options: {en: ["To intentionally lose money and reduce taxes", "Due to high 'Asset Specificity', avoiding the 'Hold-up Problem' from external suppliers", "Because cooling plates are very generic and easy to buy anywhere", "Because Apple ordered them to do so"], tw: ["為了刻意讓集團虧損以達到避稅的財務目的", "因為具備極高的「資產專屬性」，內部化製造可徹底避免被外部供應商「套牢」", "因為散熱水冷板是非常低階且通用的零件，市場上隨處可買", "因為 Apple 總部嚴格下令要求鴻海必須這麼做"]}, ans: 1 },
+        { q: {en: "In Foxconn's portfolio, what represents an 'Unrelated Diversification' strategy?", tw: "在鴻海的集團版圖中，下列何者是展現了「非相關多角化」策略的經典佈局？"}, options: {en: ["Moving from assembling iPhone 14s to iPhone 15s", "Building factories in both China and Vietnam", "Expanding from smartphone assembly into Electric Vehicles and Digital Health", "Producing its own screws for servers"], tw: ["從組裝 iPhone 14 升級為組裝 iPhone 15", "同時在中國大陸與越南建立規模龐大的生產基地", "從傳統的智慧型手機代工，大舉跨足電動車與數位健康領域", "為了伺服器產品而自行生產所需的金屬螺絲"]}, ans: 2 },
+        { q: {en: "How are Foxconn's Electric Vehicle (EV) efforts classified in the BCG Matrix currently?", tw: "在現階段的 BCG 波士頓矩陣中，鴻海的電動車 (EV) 事業最適合被歸類於哪一個象限？"}, options: {en: ["Star (High Growth, High Share)", "Cash Cow (Low Growth, High Share)", "Question Mark (High Growth, Low Share)", "Dog (Low Growth, Low Share)"], tw: ["明星事業 (高市場成長，高相對市佔)", "金牛事業 (低市場成長，高相對市佔)", "問號事業 (高市場成長，低相對市佔)", "落水狗事業 (低市場成長，低相對市佔)"]}, ans: 2 },
+        { q: {en: "What is the strategic relationship between Foxconn's Smartphone business and its EV business according to BCG?", tw: "依據 BCG 矩陣的資源分配邏輯，鴻海的智慧型手機事業與電動車事業之間存在著何種策略關係？"}, options: {en: ["They should merge into one department", "The EV business should generate cash to fund Smartphone R&D", "The Smartphone 'Cash Cow' generates funds to invest in the EV 'Question Mark'", "Both should be divested immediately"], tw: ["它們應該立即合併為同一個營運部門", "電動車事業應該負責產生現金，以資助智慧型手機的研發", "智慧型手機作為「金牛」，應榨取現金來猛烈投資電動車這個「問號事業」", "這兩個事業體都面臨虧損，應該被立刻剝離並出售"]}, ans: 2 }
+      ]
+    },
+    {
+      id: 7,
+      icon: IconFlag,
+      title: { en: "7. Global Expansion & ESG Challenges", tw: "7. 國際擴張與 ESG 永續挑戰" },
+      highlights: { 
+        en: ["Global Strategy (I-R Framework)", "China+1 Regionalization", "Net Zero & Supply Chain Decarbonization"], 
+        tw: ["全球型策略 (整合-回應架構)", "China+1 與供應鏈區域化", "淨零碳排與供應鏈深度減碳"]
+      },
+      description: {
+        en: "Examining Foxconn's geographic footprint through the Integration-Responsiveness (I-R) Framework identifies a predominantly 'Global Strategy'. The EMS industry demands massive scale to counter extreme 'Pressures for Cost Reduction'. Historically, Foxconn centralized production in China to achieve unparalleled economies of scale, exporting standardized electronic goods worldwide (Low 'Pressure for Local Responsiveness'). \n\nHowever, fierce geopolitical tensions (US-China trade war) are forcing a strategic pivot toward Regionalization or 'China+1'. Foxconn is actively distributing its massive capacity: expanding in Vietnam and Thailand for Southeast Asian resilience, and crucially, building advanced AI server and EV plants in Wisconsin, Texas, and Ohio to comply with 'Made in America' policies and remain physically proximate to core North American clients. This adds operational complexity but dramatically reduces tariff and geopolitical risks.\n\nExternally, ESG (Environmental, Social, and Governance) is no longer a PR exercise; it is a hard business requirement. Foxconn has committed to Net Zero emissions by 2050 and 100% green power usage by 2040. On the Environmental (E) front, it is rigorously implementing Greenhouse Gas inventories (ISO 14064-1) across its sprawling Asian supply chain to prepare for stringent international regulations like Europe's Carbon Border Adjustment Mechanism (CBAM). Foxconn's ability to decarbonize its massive supply chain while maintaining its cost-efficiency edge will determine whether it secures the next decade of top-tier global orders.",
+        tw: "透過「整合-回應架構 (I-R Framework)」來剖析鴻海的地緣擴張，我們看見了極具代表性的「全球型策略 (Global Strategy)」。電子代工業面臨著極度龐大的「降低成本壓力」，這迫使鴻海過去高度將產能集中於中國大陸，以榨取舉世無雙的規模經濟，並將標準化的電子產品統一傾銷全球（面臨極低的「當地回應壓力」）。\n\n然而，近年來兇猛的地緣政治衝突（如中美科技戰），正強勢逼迫鴻海進行戰略轉向，朝向「供應鏈區域化」或「中國加一 (China+1)」佈局。鴻海正積極分散其海量產能：在越南與泰國大舉擴張以建立東南亞的供應鏈韌性；更具戰略意義的是，在美國威斯康辛州、德州與俄亥俄州砸重金建立高階 AI 伺服器與電動車廠。此舉完美迎合了「美國製造」的政策紅利，並讓生產線緊密貼近北美的核心客戶。這雖然大幅增加了全球運籌的複雜度，卻極其有效地抹除了關稅壁壘與地緣政治的毀滅性風險。\n\n在外部環境方面，ESG（環境保護、社會責任、公司治理）早已脫離公關層次，成為搶奪國際訂單的生死紅線。鴻海已立下軍令狀：承諾 2050 年達成淨零排放，2040 年全面使用 100% 綠電。在環境保護 (E) 構面上，集團正針對其橫跨亞洲的龐大供應鏈，鐵腕實施溫室氣體盤查 (ISO 14064-1)，以提前佈署、正面迎擊如歐洲「碳邊境調整機制 (CBAM)」等嚴苛的國際環保法規。鴻海能否在維持極致成本優勢的同時，成功推動這條兆元級供應鏈的深度減碳，將是決定其能否繼續獨霸下一個十年全球代工版圖的絕對關鍵。"
+      },
+      wrapUp: {
+        en: "Foxconn's evolution from a centralized Chinese powerhouse to a resilient, regionalized network (China+1) combined with strict ESG compliance ensures its survival in a geopolitically fractured, climate-conscious world.",
+        tw: "鴻海從高度集中於中國的製造堡壘，成功演進為具備強大韌性的區域化網絡 (China+1)，並輔以鐵腕落實的 ESG 規範，確保了集團能在地緣政治碎裂且高度關注氣候變遷的世界中永續稱霸。"
+      },
+      cards: [
+        { term: {en:"Global Strategy (I-R)", tw:"全球型策略 (I-R 架構)"}, def: {en:"A strategy responding to immense cost pressures by centralizing production for economies of scale, producing standardized global products.", tw:"在 I-R 架構中，為因應極高的降低成本壓力，透過集中生產以達極致規模經濟，並向全球輸出標準化產品的策略定位。"} },
+        { term: {en:"China+1 Strategy", tw:"China+1 (中國加一) 策略"}, def: {en:"A business strategy to avoid over-investing in China by diversifying operations into other countries (like Vietnam or the US) to mitigate risk.", tw:"跨國企業為避免過度依賴單一國家，將生產基地與供應鏈分散至中國以外的地區（如越南、美國），以有效規避地緣政治風險的策略。"} },
+        { term: {en:"CBAM", tw:"碳邊境調整機制 (CBAM)"}, def: {en:"A carbon tariff on carbon-intensive products imported into the EU, forcing global manufacturers like Foxconn to decarbonize.", tw:"歐盟針對高碳排進口產品徵收的碳關稅機制，這股強大的外部法規壓力正迫使如鴻海等跨國製造巨頭必須加速供應鏈減碳。"} },
+        { term: {en:"Net Zero Emissions", tw:"淨零排放"}, def: {en:"Foxconn's commitment to balancing the greenhouse gases emitted into the atmosphere with the amount removed by 2050.", tw:"鴻海的終極環境承諾：確保在 2050 年前，企業排放到大氣中的溫室氣體與被移除的量達到完全平衡，實現碳中和。"} }
+      ],
+      quizzes: [
+        { q: {en: "In the I-R Framework, what primarily drives Foxconn's 'Global Strategy'?", tw: "在 I-R (整合-回應) 架構中，什麼力量最主要驅動了鴻海採取「全球型策略」？"}, options: {en: ["Extreme pressures for local product adaptation in every city", "Extreme pressures for cost reduction demanding massive economies of scale", "Zero pressure for efficiency", "The desire to build very small, artisanal factories"], tw: ["每一個城市都對產品功能提出極端在地化客製的要求", "極端龐大的「降低成本壓力」，迫使企業必須追求極致的規模經濟", "因為市場上完全不存在任何對生產效率的要求", "因為集團高層渴望建立極小型的工匠級手工作坊"]}, ans: 1 },
+        { q: {en: "What is the primary geopolitical reason for Foxconn's 'China+1' strategy (e.g., expanding in the US and Vietnam)?", tw: "促使鴻海大舉推動「China+1 (中國加一)」策略（如在美國與越南擴廠）的最主要地緣政治原因為何？"}, options: {en: ["To take advantage of higher taxes in the US", "To mitigate US-China trade war risks and avoid tariff barriers", "Because shipping from China has become too fast", "Because they ran out of workers in Asia entirely"], tw: ["為了主動向美國政府繳納更高額的企業稅金", "為了規避中美貿易戰的毀滅性風險與高昂的關稅壁壘", "因為現在從中國出貨的物流速度實在是太快了", "因為整個亞洲已經完全找不到任何基層勞動力了"]}, ans: 1 },
+        { q: {en: "Which international regulation makes ISO 14064-1 (Greenhouse Gas Inventory) critical for Foxconn's future exports to Europe?", tw: "哪一項即將上路的國際法規，使得全面落實「ISO 14064-1 (溫室氣體盤查)」對鴻海未來外銷歐洲變得生死攸關？"}, options: {en: ["GDPR (Data Privacy)", "CBAM (Carbon Border Adjustment Mechanism)", "NAFTA (Free Trade)", "WHO Health Guidelines"], tw: ["GDPR (一般資料保護規則，專注數據隱私)", "CBAM (碳邊境調整機制，針對高碳排徵收碳關稅)", "NAFTA (北美自由貿易協定)", "WHO (世界衛生組織健康指南)"]}, ans: 1 },
+        { q: {en: "By what year has Foxconn committed to achieving 100% green power usage?", tw: "鴻海已經對外公開立下軍令狀，承諾在西元哪一年達成「100% 全面使用綠電」的目標？"}, options: {en: ["2025", "2030", "2040", "2100"], tw: ["2025 年", "2030 年", "2040 年", "2100 年"]}, ans: 2 }
+      ]
+    }
+  ]
+};
+
+/* ===== FlashCard Component ===== */
+const FlashCard = ({ c, t, handleCardClick, indexKey }) => {
+  const [flipped, setFlipped] = useState(false);
+  
+  useEffect(() => {
+    setFlipped(false);
+  }, [indexKey]);
+
+  const onClick = () => {
+    setFlipped(!flipped);
+    handleCardClick();
+  };
+
+  return (
+    <div className="perspective cursor-pointer h-48" onClick={onClick}>
+      <div className={`transform-style-3d relative w-full h-full transition-transform duration-500 ${flipped ? 'rotate-y-180' : ''}`}>
+        <div className="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rounded-xl p-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 shadow-md hover:border-[#004030] dark:hover:border-[#D8C3A5] transition-colors">
+          <span className="font-serif font-black text-xl md:text-2xl text-[#004030] dark:text-[#D8C3A5] text-center">{t(c.term)}</span>
+          <span className="mt-4 text-xs text-slate-400 font-sans">{t.flip_prompt}</span>
+        </div>
+        <div className="backface-hidden rotate-y-180 absolute inset-0 bg-[#004030] dark:bg-slate-700 rounded-xl p-6 flex items-center justify-center shadow-md border border-[#004030] dark:border-[#D8C3A5]">
+          <span className="text-sm md:text-base leading-relaxed font-semibold text-white dark:text-slate-200 text-center">{t(c.def)}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ===== SVG DRAWING COMPONENTS (BCG Style - Emerald & Gold) ===== */
+const SVGTheme1 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="35" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">Foxconn's '3+3+3' Transformation Strategy (3+3+3 轉型策略)</text>
+    
+    <rect x="50" y="80" width="140" height="150" rx="8" fill="#004030" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="120" y="110" fill="#f8fafc" fontSize="10" textAnchor="middle" fontWeight="bold">3 Emerging Industries</text>
+    <text x="120" y="130" fill="#D8C3A5" fontSize="9" textAnchor="middle">三大新興產業</text>
+    <text x="120" y="160" fill="#e2e8f0" fontSize="9" textAnchor="middle">• EV (電動車)</text>
+    <text x="120" y="180" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Digital Health (數位健康)</text>
+    <text x="120" y="200" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Robotics (機器人)</text>
+
+    <path d="M 200 155 L 240 155" stroke="#D8C3A5" strokeWidth="3" fill="none" markerEnd="url(#arrowheadGold)"/>
+
+    <rect x="250" y="80" width="140" height="150" rx="8" fill="#b45309" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="320" y="110" fill="#f8fafc" fontSize="10" textAnchor="middle" fontWeight="bold">3 Core Technologies</text>
+    <text x="320" y="130" fill="#fde68a" fontSize="9" textAnchor="middle">三項核心新技術</text>
+    <text x="320" y="160" fill="#e2e8f0" fontSize="9" textAnchor="middle">• AI (人工智慧)</text>
+    <text x="320" y="180" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Semiconductor (半導體)</text>
+    <text x="320" y="200" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Next-Gen Comms (新世代通訊)</text>
+
+    <path d="M 400 155 L 440 155" stroke="#D8C3A5" strokeWidth="3" fill="none" markerEnd="url(#arrowheadGold)"/>
+
+    <rect x="450" y="80" width="130" height="150" rx="8" fill="#1e293b" opacity="0.9" stroke="#64748b" strokeWidth="2"/>
+    <text x="515" y="110" fill="#f8fafc" fontSize="10" textAnchor="middle" fontWeight="bold">3 Smart Platforms</text>
+    <text x="515" y="130" fill="#94a3b8" fontSize="9" textAnchor="middle">三大智慧平台</text>
+    <text x="515" y="160" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Smart Mfg (智慧製造)</text>
+    <text x="515" y="180" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Smart EV (智慧電動車)</text>
+    <text x="515" y="200" fill="#e2e8f0" fontSize="9" textAnchor="middle">• Smart City (智慧城市)</text>
+
+    <defs>
+      <marker id="arrowheadGold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#D8C3A5" />
+      </marker>
+    </defs>
+  </svg>
+);
+
+const SVGTheme2 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="35" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">Macro Environment Analysis: PESTEL (總體環境分析)</text>
+    
+    <rect x="70" y="80" width="130" height="160" rx="6" fill="#004030" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="135" y="110" fill="#f8fafc" fontSize="11" textAnchor="middle" fontWeight="bold">Political (政治)</text>
+    <text x="135" y="140" fill="#D8C3A5" fontSize="9" textAnchor="middle">US-China Tech War</text>
+    <text x="135" y="160" fill="#D8C3A5" fontSize="9" textAnchor="middle">中美科技戰</text>
+    <text x="135" y="190" fill="#e2e8f0" fontSize="9" textAnchor="middle">De-risking / China+1</text>
+    <text x="135" y="210" fill="#e2e8f0" fontSize="9" textAnchor="middle">美國製造政策</text>
+
+    <rect x="235" y="80" width="130" height="160" rx="6" fill="#b45309" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="300" y="110" fill="#f8fafc" fontSize="11" textAnchor="middle" fontWeight="bold">Technological (科技)</text>
+    <text x="300" y="140" fill="#fde68a" fontSize="9" textAnchor="middle">Gen-AI / LLMs</text>
+    <text x="300" y="160" fill="#fde68a" fontSize="9" textAnchor="middle">生成式 AI 算力革命</text>
+    <text x="300" y="190" fill="#e2e8f0" fontSize="9" textAnchor="middle">EV Paradigm Shift</text>
+    <text x="300" y="210" fill="#e2e8f0" fontSize="9" textAnchor="middle">軟體定義汽車</text>
+
+    <rect x="400" y="80" width="130" height="160" rx="6" fill="#1e40af" opacity="0.9" stroke="#93c5fd" strokeWidth="2"/>
+    <text x="465" y="110" fill="#f8fafc" fontSize="11" textAnchor="middle" fontWeight="bold">Environmental (環境)</text>
+    <text x="465" y="140" fill="#93c5fd" fontSize="9" textAnchor="middle">Net Zero 2050</text>
+    <text x="465" y="160" fill="#93c5fd" fontSize="9" textAnchor="middle">2050 淨零碳排</text>
+    <text x="465" y="190" fill="#e2e8f0" fontSize="9" textAnchor="middle">CBAM / ISO 14064-1</text>
+    <text x="465" y="210" fill="#e2e8f0" fontSize="9" textAnchor="middle">供應鏈深度減碳</text>
+  </svg>
+);
+
+const SVGTheme3 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="25" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">Porter's Five Forces: Foxconn's Competitive Dynamics (波特五力分析)</text>
+    
+    {/* Center: Rivalry */}
+    <rect x="230" y="120" width="140" height="70" rx="8" fill="#b45309" stroke="#fbbf24" strokeWidth="2" opacity="0.9"/>
+    <text x="300" y="145" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Rivalry (現有競爭者)</text>
+    <text x="300" y="160" fill="#fde68a" fontSize="8" textAnchor="middle">High: Quanta, Wistron</text>
+    <text x="300" y="175" fill="#fde68a" fontSize="8" textAnchor="middle">極高：廣達, 緯創廝殺</text>
+
+    {/* Top: Entrants */}
+    <rect x="240" y="45" width="120" height="50" rx="6" fill="#1e293b" stroke="#64748b" strokeWidth="1"/>
+    <text x="300" y="65" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontWeight="bold">New Entrants (潛在進入者)</text>
+    <text x="300" y="80" fill="#94a3b8" fontSize="8" textAnchor="middle">Medium: Luxshare (立訊)</text>
+    <path d="M 300 95 L 300 115" stroke="#94a3b8" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGray)"/>
+
+    {/* Bottom: Substitutes */}
+    <rect x="240" y="215" width="120" height="50" rx="6" fill="#1e293b" stroke="#64748b" strokeWidth="1"/>
+    <text x="300" y="235" fill="#cbd5e1" fontSize="9" textAnchor="middle" fontWeight="bold">Substitutes (替代品)</text>
+    <text x="300" y="250" fill="#94a3b8" fontSize="8" textAnchor="middle">Low for EMS / High for EV</text>
+    <path d="M 300 215 L 300 195" stroke="#94a3b8" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGray)"/>
+
+    {/* Left: Suppliers */}
+    <rect x="50" y="125" width="130" height="60" rx="6" fill="#004030" stroke="#D8C3A5" strokeWidth="2" opacity="0.9"/>
+    <text x="115" y="145" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Suppliers (供應商議價力)</text>
+    <text x="115" y="160" fill="#D8C3A5" fontSize="8" textAnchor="middle">Med-High: TSMC, NVIDIA</text>
+    <text x="115" y="175" fill="#D8C3A5" fontSize="8" textAnchor="middle">中高：台積電, 輝達壟斷</text>
+    <path d="M 180 155 L 225 155" stroke="#D8C3A5" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGold)"/>
+
+    {/* Right: Buyers */}
+    <rect x="420" y="125" width="130" height="60" rx="6" fill="#004030" stroke="#D8C3A5" strokeWidth="2" opacity="0.9"/>
+    <text x="485" y="145" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Buyers (買方議價力)</text>
+    <text x="485" y="160" fill="#D8C3A5" fontSize="8" textAnchor="middle">Extremely High: Apple, CSPs</text>
+    <text x="485" y="175" fill="#D8C3A5" fontSize="8" textAnchor="middle">極高：蘋果, 雲端巨頭壓價</text>
+    <path d="M 420 155 L 375 155" stroke="#D8C3A5" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGold)"/>
+
+    <defs>
+      <marker id="arrowheadGray" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+        <polygon points="0 0, 6 2, 0 4" fill="#475569" />
+      </marker>
+    </defs>
+  </svg>
+);
+
+const SVGTheme4 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="35" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">From Linear Value Chain to MIH Ecosystem (從線性價值鏈至生態系)</text>
+    
+    <text x="100" y="80" fill="#94a3b8" fontSize="10" textAnchor="middle" fontWeight="bold">Legacy Auto (傳統車廠)</text>
+    <rect x="40" y="100" width="80" height="40" rx="4" fill="#0f172a" stroke="#475569" strokeWidth="1"/>
+    <text x="80" y="125" fill="#cbd5e1" fontSize="10" textAnchor="middle">Tier 2/3</text>
+    <path d="M 125 120 L 155 120" stroke="#475569" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGray)"/>
+    
+    <rect x="160" y="100" width="80" height="40" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="1"/>
+    <text x="200" y="125" fill="#cbd5e1" fontSize="10" textAnchor="middle">Tier 1</text>
+    <path d="M 245 120 L 275 120" stroke="#475569" strokeWidth="2" fill="none" markerEnd="url(#arrowheadGray)"/>
+    
+    <rect x="280" y="100" width="80" height="40" rx="4" fill="#334155" stroke="#475569" strokeWidth="1"/>
+    <text x="320" y="125" fill="#f8fafc" fontSize="10" textAnchor="middle">Auto OEM</text>
+
+    <text x="450" y="80" fill="#D8C3A5" fontSize="10" textAnchor="middle" fontWeight="bold">MIH Open Platform (開放平台)</text>
+    <circle cx="450" cy="180" r="60" fill="#004030" stroke="#D8C3A5" strokeWidth="2" opacity="0.9"/>
+    <text x="450" y="175" fill="#f8fafc" fontSize="12" textAnchor="middle" fontWeight="bold">Foxconn</text>
+    <text x="450" y="195" fill="#D8C3A5" fontSize="9" textAnchor="middle">Orchestrator(協調者)</text>
+
+    <circle cx="360" cy="120" r="30" fill="#b45309" stroke="#fbbf24" strokeWidth="1"/>
+    <text x="360" y="123" fill="#f8fafc" fontSize="9" textAnchor="middle">Software</text>
+    <path d="M 385 135 L 410 150" stroke="#fbbf24" strokeWidth="2" strokeDasharray="3" fill="none"/>
+
+    <circle cx="540" cy="120" r="30" fill="#b45309" stroke="#fbbf24" strokeWidth="1"/>
+    <text x="540" y="123" fill="#f8fafc" fontSize="9" textAnchor="middle">Battery</text>
+    <path d="M 515 135 L 490 150" stroke="#fbbf24" strokeWidth="2" strokeDasharray="3" fill="none"/>
+
+    <circle cx="450" cy="280" r="30" fill="#b45309" stroke="#fbbf24" strokeWidth="1"/>
+    <text x="450" y="283" fill="#f8fafc" fontSize="9" textAnchor="middle">Brands</text>
+    <path d="M 450 250 L 450 240" stroke="#fbbf24" strokeWidth="2" strokeDasharray="3" fill="none"/>
+  </svg>
+);
+
+const SVGTheme5 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="35" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">Dynamic Capabilities Framework (動態能力架構)</text>
+    <circle cx="300" cy="160" r="90" fill="none" stroke="#004030" strokeWidth="3" strokeDasharray="8 4"/>
+    
+    <circle cx="300" cy="70" r="35" fill="#004030" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="300" y="65" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Sensing (感知)</text>
+    <text x="300" y="85" fill="#D8C3A5" fontSize="8" textAnchor="middle">Gen-AI & EV Trends</text>
+
+    <circle cx="380" cy="210" r="35" fill="#b45309" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="380" y="205" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Seizing (掌握)</text>
+    <text x="380" y="225" fill="#D8C3A5" fontSize="8" textAnchor="middle">US CapEx & ZF M&A</text>
+
+    <circle cx="220" cy="210" r="35" fill="#4338ca" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="220" y="205" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Transform(重組)</text>
+    <text x="220" y="225" fill="#D8C3A5" fontSize="8" textAnchor="middle">Foxconn 3.0</text>
+  </svg>
+);
+
+const SVGTheme6 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="30" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">BCG Growth-Share Matrix (波士頓矩陣資源配置)</text>
+    
+    <line x1="300" y1="50" x2="300" y2="250" stroke="#004030" strokeWidth="2"/>
+    <line x1="100" y1="150" x2="500" y2="150" stroke="#004030" strokeWidth="2"/>
+    
+    <text x="100" y="140" fill="#D8C3A5" fontSize="9" textAnchor="end" transform="rotate(-90 80 150)">Market Growth (市場成長率)</text>
+    <text x="300" y="270" fill="#D8C3A5" fontSize="9" textAnchor="middle">Relative Market Share (相對市佔率)</text>
+    
+    <text x="200" y="80" fill="#cbd5e1" fontSize="12" textAnchor="middle" opacity="0.3">Stars (明星)</text>
+    <text x="400" y="80" fill="#cbd5e1" fontSize="12" textAnchor="middle" opacity="0.3">Question Marks (問號)</text>
+    <text x="200" y="220" fill="#cbd5e1" fontSize="12" textAnchor="middle" opacity="0.3">Cash Cows (金牛)</text>
+    <text x="400" y="220" fill="#cbd5e1" fontSize="12" textAnchor="middle" opacity="0.3">Dogs (落水狗)</text>
+
+    <circle cx="200" cy="220" r="30" fill="#004030" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="200" y="215" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">Smartphones</text>
+    <text x="200" y="230" fill="#D8C3A5" fontSize="8" textAnchor="middle">智慧型手機</text>
+
+    <circle cx="200" cy="80" r="30" fill="#b45309" opacity="0.9" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="200" y="75" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">AI Servers</text>
+    <text x="200" y="90" fill="#fde68a" fontSize="8" textAnchor="middle">AI 伺服器</text>
+
+    <circle cx="430" cy="80" r="30" fill="#1e293b" opacity="0.9" stroke="#94a3b8" strokeWidth="2"/>
+    <text x="430" y="75" fill="white" fontSize="10" textAnchor="middle" fontWeight="bold">EV Business</text>
+    <text x="430" y="90" fill="#94a3b8" fontSize="8" textAnchor="middle">電動車</text>
+
+    <path d="M 230 200 Q 350 150 410 105" stroke="#fbbf24" strokeWidth="2" fill="none" strokeDasharray="4" markerEnd="url(#arrowheadGold)"/>
+    <text x="340" y="195" fill="#fbbf24" fontSize="9" fontWeight="bold">Fund Massive R&D/CapEx</text>
+  </svg>
+);
+
+const SVGTheme7 = ({lang}) => (
+  <svg viewBox="0 0 600 300" className="w-full h-auto bg-slate-900 rounded-lg shadow-lg border border-[#004030]/50 dark:border-[#D8C3A5]/30">
+    <text x="300" y="35" fill="#D8C3A5" fontSize="12" textAnchor="middle" fontWeight="bold">Global Footprint: 'China+1' Regionalization (供應鏈區域化)</text>
+    
+    <circle cx="420" cy="150" r="35" fill="#004030" stroke="#D8C3A5" strokeWidth="2"/>
+    <text x="420" y="145" fill="#f8fafc" fontSize="11" textAnchor="middle" fontWeight="bold">China (中國)</text>
+    <text x="420" y="165" fill="#6ee7b7" fontSize="9" textAnchor="middle">Legacy Scale</text>
+    
+    <circle cx="280" cy="220" r="28" fill="#b45309" stroke="#fbbf24" strokeWidth="2"/>
+    <text x="280" y="215" fill="#f8fafc" fontSize="10" textAnchor="middle" fontWeight="bold">VN / TH</text>
+    <text x="280" y="235" fill="#fde68a" fontSize="8" textAnchor="middle">SE Asia Resilience</text>
+
+    <circle cx="160" cy="120" r="32" fill="#1e40af" stroke="#93c5fd" strokeWidth="2"/>
+    <text x="160" y="115" fill="#f8fafc" fontSize="10" textAnchor="middle" fontWeight="bold">USA (美國)</text>
+    <text x="160" y="135" fill="#93c5fd" fontSize="8" textAnchor="middle">AI Servers / EV</text>
+
+    <path d="M 385 160 L 310 205" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4"/>
+    <path d="M 385 140 L 195 125" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4"/>
+    
+    <text x="280" y="125" fill="#fbbf24" fontSize="10" textAnchor="middle" fontWeight="bold">Geopolitical De-risking (地緣政治避險)</text>
+  </svg>
+);
+
+const SVG_COMPONENTS = [null, SVGTheme1, SVGTheme2, SVGTheme3, SVGTheme4, SVGTheme5, SVGTheme6, SVGTheme7];
+
+/* ===== UI Components ===== */
+const TopHeader = ({ menuOpen, setMenuOpen, navTo, tUI, speakText, stopSpeak, speechSynthesisActive, lang, setLang, isDark, setIsDark }) => {
+  const toggleLangText = lang === 'en' ? '繁體中文' : 'English';
+
+  return (
+    <header className="fixed top-0 left-0 right-0 h-16 z-50 flex items-center justify-between px-4 border-b bg-[#004030] dark:bg-slate-900 border-[#D8C3A5]/30 shadow-lg text-white">
+      <div className="flex items-center gap-3">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Menu">
+          {menuOpen ? <IconX size={20} /> : <IconMenu size={20} />}
+        </button>
+        <button onClick={() => navTo(0)} className="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Home (首頁)">
+          <IconHome size={20} />
+        </button>
+        <div className="font-bold text-lg md:text-xl tracking-tight cursor-pointer flex items-center gap-2" onClick={() => navTo(0)}>
+          <span className="font-serif font-black text-[#D8C3A5] text-lg tracking-widest">{tUI('brand')}</span>
+          <span className="hidden sm:inline font-serif text-sm">{tUI('title')}</span>
+        </div>
+      </div>
+      
+      <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-1">
+          <button onClick={() => speakText()} className="p-1.5 hover:bg-white/10 rounded-lg transition-colors" title="Play Full Page">
+            <IconPlay size={18} />
+          </button>
+          <button onClick={stopSpeak} className={`p-1.5 hover:bg-white/10 rounded-lg transition-colors ${speechSynthesisActive ? 'text-[#D8C3A5] animate-pulse' : ''}`} title="Stop Audio">
+            <IconSquare size={18} />
+          </button>
+        </div>
+        
+        <button onClick={() => { stopSpeak(); setLang(lang === 'en' ? 'tw' : 'en'); }} className="px-3 py-1.5 rounded-lg border border-[#D8C3A5]/50 hover:bg-[#D8C3A5] hover:text-[#004030] text-sm font-bold transition-colors whitespace-nowrap">
+          {toggleLangText}
+        </button>
+        
+        <button onClick={() => setIsDark(!isDark)} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+          {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}
+        </button>
+      </div>
+    </header>
+  );
+};
+
+const DrawerMenu = ({ menuOpen, navTo, tUI, t, currentPage }) => {
+  return (
+    <div className={`fixed inset-y-0 left-0 w-72 transform ${menuOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 z-40 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 shadow-2xl pt-16 overflow-y-auto`}>
+      <nav className="p-4 flex flex-col gap-2">
+        <button onClick={() => navTo(0)} className={`text-left p-3 rounded-lg flex items-center gap-3 font-bold transition-colors ${currentPage===0 ? 'bg-[#004030] text-white dark:bg-[#D8C3A5]/20 dark:text-[#D8C3A5]' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+          <IconBookOpen size={18}/> 0. {tUI('executiveSummary')}
+        </button>
+        {DICT.THEMES.map((th) => (
+          <button key={th.id} onClick={() => navTo(th.id)} className={`text-left p-3 rounded-lg flex items-center gap-3 font-bold transition-colors ${currentPage===th.id ? 'bg-[#004030] text-white dark:bg-[#D8C3A5]/20 dark:text-[#D8C3A5]' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+             <th.icon size={18}/> {t(th.title)}
+          </button>
+        ))}
+        <div className="my-3 border-b border-slate-200 dark:border-slate-700"></div>
+        <button onClick={() => navTo(8)} className={`text-left p-3 rounded-lg flex items-center gap-3 font-bold transition-colors ${currentPage===8 ? 'bg-[#004030] text-white dark:bg-[#D8C3A5]/20 dark:text-[#D8C3A5]' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+          <IconActivity size={18}/> 8. {tUI('interactiveLab')}
+        </button>
+        <button onClick={() => navTo(9)} className={`text-left p-3 rounded-lg flex items-center gap-3 font-bold transition-colors ${currentPage===9 ? 'bg-[#004030] text-white dark:bg-[#D8C3A5]/20 dark:text-[#D8C3A5]' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+          <IconGlobe size={18}/> 9. {tUI('externalResources')}
+        </button>
+        <button onClick={() => navTo(10)} className={`text-left p-3 rounded-lg flex items-center gap-3 font-bold transition-colors ${currentPage===10 ? 'bg-[#004030] text-white dark:bg-[#D8C3A5]/20 dark:text-[#D8C3A5]' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+          <IconCheckCircle size={18}/> 10. {tUI('analytics')}
+        </button>
+      </nav>
+    </div>
+  );
+};
+
+const FooterBlock = () => {
+  return (
+    <footer className="h-8 fixed bottom-0 left-0 right-0 flex items-center justify-between px-6 text-xs font-semibold z-30 bg-[#004030] text-[#D8C3A5]/60 border-t border-[#D8C3A5]/30">
+      <div>v2.5 (2026.04) © Foxconn Strategy Report</div>
+      <div className="flex gap-6 items-center">
+        <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" rel="noreferrer" className="hover:text-white transition-colors underline underline-offset-2">
+          Architect: Prof. Shihmin Lo
+        </a>
+        <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="font-bold hover:text-white transition-colors flex items-center gap-1">
+          TOP ↑
+        </button>
+      </div>
+    </footer>
+  );
+};
+
+const OverviewView = ({ t, tUI, navTo, lang }) => {
+  const allCards = [
+    ...DICT.THEMES.map(th => ({ id: th.id, icon: th.icon, title: t(th.title) })),
+    { id: 8, icon: IconActivity, title: tUI('interactiveLab') },
+    { id: 9, icon: IconGlobe, title: tUI('externalResources') },
+    { id: 10, icon: IconCheckCircle, title: tUI('analytics') }
+  ];
+
+  return (
+    <div className="max-w-5xl mx-auto animate-fade-in mt-4">
+      <div className="bg-[#004030] dark:bg-slate-800 rounded-2xl p-6 sm:p-8 text-white mb-10 shadow-lg">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#D8C3A5] mb-3">Strategy Report</p>
+        <h1 className="text-3xl md:text-4xl font-serif font-black mb-4">{t(DICT.OVERVIEW.title)}</h1>
+        <div className="text-[#D8C3A5]/90 text-base leading-loose whitespace-pre-wrap font-medium">
+          {t(DICT.OVERVIEW.content)}
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allCards.map(item => (
+          <div key={item.id} onClick={() => navTo(item.id)} className={`bg-white dark:bg-slate-800 p-6 rounded-xl border ${item.id >= 8 ? 'border-amber-200 dark:border-amber-900/50 hover:border-amber-500' : 'border-slate-200 dark:border-slate-700 hover:border-[#004030] dark:hover:border-[#D8C3A5]'} cursor-pointer hover:shadow-xl transition-all duration-300 group flex flex-col items-center text-center gap-4`}>
+            <div className={`p-4 rounded-full transition-colors ${item.id >= 8 ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white' : 'bg-[#004030]/5 dark:bg-[#D8C3A5]/10 text-[#004030] dark:text-[#D8C3A5] group-hover:bg-[#004030] dark:group-hover:bg-[#D8C3A5] group-hover:text-white dark:group-hover:text-[#004030]'}`}>
+              <item.icon size={32} />
+            </div>
+            <div className={`font-bold font-serif text-lg ${item.id >= 8 ? 'text-amber-700 dark:text-amber-500' : 'text-[#004030] dark:text-[#D8C3A5]'}`}>{item.title}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ThemeContentView = ({ themeData, t, tUI, navTo, lang, updateCardAnalytics, updateQuizAnalytics }) => {
+  const [cardIdx, setCardIdx] = useState(0);
+  const [quizIdx, setQuizIdx] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [cardClicks, setCardClicks] = useState(0);
+  
+  const SVGVisual = SVG_COMPONENTS[themeData.id] || (() => <div/>);
+
+  useEffect(() => {
+    if (themeData && themeData.cards && themeData.cards.length > 0) {
+      updateCardAnalytics(themeData.id, Math.min(2, themeData.cards.length), cardClicks);
+    }
+  }, [themeData, cardIdx, updateCardAnalytics, cardClicks]);
+
+  const handleNextCards = () => {
+    const newIdx = Math.min(cardIdx + 2, themeData.cards.length - 2);
+    setCardIdx(newIdx);
+    updateCardAnalytics(themeData.id, Math.min(newIdx + 2, themeData.cards.length), cardClicks);
+  };
+
+  const handleCardClick = () => {
+    setCardClicks(c => c + 1);
+    updateCardAnalytics(themeData.id, Math.min(cardIdx + 2, themeData.cards.length), cardClicks + 1);
+  };
+
+  const handleQuizSelect = (qIdx, optIdx) => {
+    const newAns = {...quizAnswers, [qIdx]: optIdx};
+    setQuizAnswers(newAns);
+    let score = 0;
+    themeData.quizzes.forEach((q, i) => {
+      if (newAns[i] === q.ans) score++;
+    });
+    updateQuizAnalytics(themeData.id, score, Object.keys(newAns).length);
+  };
+
+  const handleNextQuiz = () => {
+    setQuizIdx(Math.min(quizIdx + 2, themeData.quizzes.length - 2));
+  };
+
+  return (
+    <div className="max-w-5xl mx-auto pb-12 animate-fade-in mt-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{t(themeData.title)}</h1>
+      </div>
+
+      <div className="flex flex-wrap gap-3 mb-8">
+        {t(themeData.highlights).map((hl, i) => (
+          <span key={i} className="px-4 py-1.5 bg-[#004030]/10 text-[#004030] dark:bg-[#D8C3A5]/10 dark:text-[#D8C3A5] text-sm font-bold rounded-full border border-[#004030]/20 dark:border-[#D8C3A5]/20 shadow-sm">★ {hl}</span>
+        ))}
+      </div>
+
+      <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl mb-12 text-lg leading-loose whitespace-pre-wrap font-medium">
+        <h2 className="text-2xl font-serif font-black mb-5 flex items-center gap-2 border-b-2 border-slate-200 dark:border-slate-700 pb-3 text-[#004030] dark:text-[#D8C3A5]"><IconBookOpen size={24}/> {tUI('description')}</h2>
+        {t(themeData.description)}
+      </div>
+
+      {/* SVG MOVED BELOW DESCRIPTION */}
+      <div className="mb-12"><SVGVisual lang={lang}/></div>
+
+      <div className="mb-12">
+        <h2 className="text-2xl font-serif font-black mb-5 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconTarget size={24}/> {tUI('flashcards')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
+          {themeData.cards.slice(cardIdx, cardIdx + 2).map((c, i) => (
+            <FlashCard key={`${themeData.id}-${cardIdx}-${i}`} c={c} t={t} handleCardClick={handleCardClick} indexKey={`${themeData.id}-${cardIdx}-${i}`} />
+          ))}
+        </div>
+        <div className="flex justify-between items-center text-sm font-bold text-slate-500 dark:text-slate-400">
+          <div>{tUI('clicks')}: <span className="text-[#004030] dark:text-[#D8C3A5]">{cardClicks}</span> &nbsp;|&nbsp; {tUI('shown')}: <span className="text-[#004030] dark:text-[#D8C3A5]">{Math.min(cardIdx + 2, themeData.cards.length)}</span> / {tUI('total')}: {themeData.cards.length}</div>
+          <div className="flex gap-3">
+            <button onClick={() => setCardIdx(0)} disabled={cardIdx === 0} className="px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-50 transition-colors"><IconRefreshCcw size={18}/></button>
+            <button onClick={handleNextCards} disabled={cardIdx + 2 >= themeData.cards.length} className="px-4 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg disabled:opacity-50 flex items-center gap-1 font-bold shadow-md transition-colors"><IconChevronRight size={18}/> {tUI('next')} </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="p-6 rounded-xl border-l-8 border-l-[#004030] dark:border-l-[#D8C3A5] bg-[#004030]/5 dark:bg-[#D8C3A5]/5 mb-12 shadow-sm">
+        <h3 className="font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-2 text-xl">{tUI('wrapUp')}</h3>
+        <p className="text-base md:text-lg italic font-medium text-slate-700 dark:text-slate-300">{t(themeData.wrapUp)}</p>
+      </div>
+
+      <div className="mb-12">
+        <h2 className="text-2xl font-serif font-black mb-5 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconCheckCircle size={24}/> {tUI('quiz')}</h2>
+        <div className="space-y-6 mb-5">
+          {themeData.quizzes.slice(quizIdx, quizIdx + 2).map((q, localIdx) => {
+            const globalIdx = quizIdx + localIdx;
+            const userAns = quizAnswers[globalIdx];
+            const isAnswered = userAns !== undefined;
+            const isCorrect = userAns === q.ans;
+            
+            return (
+              <div key={globalIdx} className="p-6 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md">
+                <p className="font-bold mb-5 text-lg text-slate-800 dark:text-slate-200">Q: {t(q.q)}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {t(q.options).map((opt, oIdx) => {
+                    let btnClass = "p-4 rounded-lg border-2 text-left text-base font-bold transition-all duration-200 ";
+                    if (!isAnswered) btnClass += "hover:bg-[#004030]/5 dark:hover:bg-[#D8C3A5]/10 hover:border-[#004030] dark:hover:border-[#D8C3A5] border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300";
+                    else if (oIdx === q.ans) btnClass += "bg-[#004030] dark:bg-[#D8C3A5] border-[#004030] dark:border-[#D8C3A5] text-white dark:text-[#004030] shadow-lg"; 
+                    else if (oIdx === userAns) btnClass += "bg-red-500 border-red-600 text-white"; 
+                    else btnClass += "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 opacity-40";
+                    
+                    return (
+                      <button key={oIdx} disabled={isAnswered} onClick={() => handleQuizSelect(globalIdx, oIdx)} className={btnClass}>
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+                {isAnswered && (
+                  <div className={`mt-4 text-base font-extrabold flex items-center gap-2 p-3 rounded-lg ${isCorrect ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+                    {isCorrect ? <><IconCheckCircle size={20}/> {lang === 'en' ? 'Excellent judgment!' : '判斷精確！'}</> : <><IconXCircle size={20}/> {lang === 'en' ? 'Strategic Miss. Please review.' : '判斷錯誤，請重新審視本章策略理論。'}</>}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-between items-center text-sm font-bold text-slate-500 dark:text-slate-400">
+           <div>{tUI('correct')}: <span className="text-[#004030] dark:text-[#D8C3A5]">{Object.keys(quizAnswers).filter(k => quizAnswers[k] === themeData.quizzes[k].ans).length}</span> &nbsp;|&nbsp; {tUI('answered')}: <span className="text-[#004030] dark:text-[#D8C3A5]">{Object.keys(quizAnswers).length}</span> / {tUI('total')}: {themeData.quizzes.length}</div>
+           <div className="flex gap-3">
+            <button onClick={() => { setQuizAnswers({}); setQuizIdx(0); }} className="px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 flex items-center gap-2 transition-colors"><IconRefreshCcw size={18}/> {tUI('retry')}</button>
+            <button onClick={handleNextQuiz} disabled={quizIdx + 2 >= themeData.quizzes.length} className="px-4 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg disabled:opacity-50 flex items-center gap-1 font-bold shadow-md transition-colors"><IconChevronRight size={18}/> {tUI('next')} </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center pt-8 border-t border-slate-300 dark:border-slate-700">
+        <button onClick={() => navTo(themeData.id === 1 ? 0 : themeData.id - 1)} className="flex items-center gap-2 px-6 py-3 font-serif font-bold text-slate-500 hover:text-[#004030] dark:hover:text-[#D8C3A5] transition-colors uppercase tracking-wider text-sm">
+          <IconChevronLeft size={20}/> {tUI('prevPage')}
+        </button>
+        <button onClick={() => navTo(themeData.id === 7 ? 8 : themeData.id + 1)} className="flex items-center gap-2 px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg font-serif font-bold shadow-md hover:bg-[#002b20] dark:hover:bg-white transition-colors uppercase tracking-wider text-sm">
+          {tUI('nextPage')} <IconChevronRight size={20}/>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const InteractiveLabView = ({ lang, tUI, navTo }) => {
+  const [sliders, setSliders] = useState({ tw: 50, vn: 30, cn: 20 });
+  const [lab1Status, setLab1Status] = useState(0);
+  const [lab2Status, setLab2Status] = useState(0);
+  
+  // For Lab 4: Five Forces Simulator
+  const [forces, setForces] = useState({ buyer: 80, supplier: 70, rivalry: 85, entry: 40, sub: 60 });
+  // Profitability inversely proportional to forces intensity
+  const profitability = Math.max(0, Math.min(100, 100 - ((forces.buyer + forces.supplier + forces.rivalry + forces.entry + forces.sub) / 5) * 1.2 + 20));
+
+  const metricInnovation = sliders.tw * 1.5 + sliders.cn * 0.5;
+  const metricCost = sliders.vn * 1.8 + sliders.cn * 1.2 - sliders.tw * 0.5;
+  const metricRisk = 100 - (sliders.vn > 70 ? (sliders.vn-70)*2 : 0) - (sliders.cn > 40 ? 20 : 0);
+  const norm = (val) => Math.min(100, Math.max(0, val));
+
+  return (
+    <div className="max-w-5xl mx-auto pb-12 animate-fade-in mt-4">
+       <h1 className="text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-6">{tUI('interactiveLab')}</h1>
+       <p className="mb-8 text-lg font-medium text-slate-700 dark:text-slate-300">
+         {lang === 'en' ? "Apply Foxconn's strategic theories in these simulated management labs." : "在以下高階管理模擬研究室中，實務驗證鴻海個案的策略理論。"}
+       </p>
+
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+         {/* Lab 1: VRIN Sorting */}
+         <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:border-[#004030] dark:hover:border-[#D8C3A5] transition-all">
+           <h3 className="font-serif font-black text-xl mb-3 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconTarget /> Lab 1: VRIN Resource Sorting</h3>
+           {lab1Status === 0 ? (
+             <div>
+               <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-4 h-16">{lang === 'en' ? "Q: Which VRIN trait best describes Foxconn's 50 years of profound trust built with Apple/NVIDIA?" : "Q: 鴻海 50 年來與頂級客戶（Apple/NVIDIA）建立的深厚信任與供應鏈默契，最主要屬於 VRIN 中的哪一項特質？"}</p>
+               <div className="grid grid-cols-2 gap-2">
+                 <button onClick={()=>setLab1Status(2)} className="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded font-bold text-sm">Valuable (有價值)</button>
+                 <button onClick={()=>setLab1Status(2)} className="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded font-bold text-sm">Rare (稀有)</button>
+                 <button onClick={()=>setLab1Status(1)} className="py-2 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 text-[#004030] dark:text-[#D8C3A5] hover:bg-[#004030] hover:text-white dark:hover:bg-[#D8C3A5] dark:hover:text-[#004030] rounded font-bold text-sm transition-colors">Inimitable (難以模仿)</button>
+                 <button onClick={()=>setLab1Status(2)} className="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded font-bold text-sm">Non-substitutable</button>
+               </div>
+             </div>
+           ) : (
+             <div className={`h-full flex flex-col justify-center items-center p-4 rounded-lg font-bold text-center ${lab1Status === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+               <p className="mb-4">{lab1Status === 1 ? (lang === 'en' ? 'Correct! This is Social Complexity.' : '正確！信任與社會複雜性極難被競爭者輕易模仿。') : (lang === 'en' ? 'Incorrect. Please reconsider Social Complexity.' : '錯誤，請再思考「社會複雜性」防禦機制的特性。')}</p>
+               <button onClick={()=>setLab1Status(0)} className="underline hover:opacity-70">{tUI('retry')}</button>
+             </div>
+           )}
+         </div>
+
+         {/* Lab 2: BCG Matrix Plotter */}
+         <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:border-[#004030] dark:hover:border-[#D8C3A5] transition-all">
+           <h3 className="font-serif font-black text-xl mb-3 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconActivity /> Lab 2: BCG Matrix Plotter</h3>
+           {lab2Status === 0 ? (
+             <div>
+               <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-2 h-8">{lang === 'en' ? "Where does Foxconn's EV Business (MIH) belong in the BCG matrix?" : "請點選：鴻海大舉投入的「電動車 (EV)」事業目前應位於 BCG 矩陣的哪個象限？"}</p>
+               <div className="relative mt-2 p-2">
+                 <div className="grid grid-cols-2 gap-2 h-32 relative z-10">
+                   <button onClick={()=>setLab2Status(2)} className="border-2 border-dashed border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-500 rounded">Star (明星)</button>
+                   <button onClick={()=>setLab2Status(1)} className="border-2 border-dashed border-slate-300 dark:border-slate-600 hover:bg-[#004030]/10 dark:hover:bg-[#D8C3A5]/10 hover:border-[#004030] dark:hover:border-[#D8C3A5] flex items-center justify-center font-bold text-slate-500 rounded transition-colors">Question Mark (問號)</button>
+                   <button onClick={()=>setLab2Status(2)} className="border-2 border-dashed border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-500 rounded">Cash Cow (金牛)</button>
+                   <button onClick={()=>setLab2Status(2)} className="border-2 border-dashed border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-500 rounded">Dog (落水狗)</button>
+                 </div>
+               </div>
+             </div>
+           ) : (
+             <div className={`h-full flex flex-col justify-center items-center p-4 rounded-lg font-bold text-center ${lab2Status === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+               <p className="mb-4">{lab2Status === 1 ? (lang === 'en' ? 'Correct! High market growth, low relative share.' : '正確！電動車屬高市場成長率、但鴻海目前相對市佔率較低，屬於急需資金挹注的問號區。') : (lang === 'en' ? 'Incorrect. Evaluate its growth and market share.' : '錯誤！請重新評估電動車的高爆發成長與鴻海目前的低市佔現況。')}</p>
+               <button onClick={()=>setLab2Status(0)} className="underline hover:opacity-70">{tUI('retry')}</button>
+             </div>
+           )}
+         </div>
+       </div>
+
+       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+         {/* Lab 3: Global Resource Simulator */}
+         <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl">
+           <h3 className="font-serif font-black text-xl mb-4 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconMap /> Lab 3: Global Resource Allocation Simulator (資源配置模擬)</h3>
+           <p className="text-sm mb-6 font-medium text-slate-600 dark:text-slate-400">{lang === 'en' ? "Adjust regional capacity to witness the strategic impact." : "調整各區域的產能配比，動態觀察對地緣政治與成本效益的影響。"}</p>
+           
+           <div className="space-y-6">
+              <div>
+                <label className="flex justify-between text-sm font-bold mb-2 text-slate-800 dark:text-slate-200">
+                  <span>USA (AI Servers / EV)</span> <span className="text-[#004030] dark:text-[#D8C3A5]">{sliders.tw}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={sliders.tw} onChange={(e)=>setSliders({...sliders, tw: Number(e.target.value)})} className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#004030] dark:accent-[#D8C3A5]"/>
+              </div>
+              <div>
+                <label className="flex justify-between text-sm font-bold mb-2 text-slate-800 dark:text-slate-200">
+                  <span>Vietnam / Thailand (Mass Mfg)</span> <span className="text-[#004030] dark:text-[#D8C3A5]">{sliders.vn}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={sliders.vn} onChange={(e)=>setSliders({...sliders, vn: Number(e.target.value)})} className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#004030] dark:accent-[#D8C3A5]"/>
+              </div>
+              <div>
+                <label className="flex justify-between text-sm font-bold mb-2 text-slate-800 dark:text-slate-200">
+                  <span>China (Legacy Scale)</span> <span className="text-[#004030] dark:text-[#D8C3A5]">{sliders.cn}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={sliders.cn} onChange={(e)=>setSliders({...sliders, cn: Number(e.target.value)})} className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#004030] dark:accent-[#D8C3A5]"/>
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center space-y-4 mt-6 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+               <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 mb-1"><span>Geopolitical Resilience (地緣避險能力)</span> <span>{Math.round(norm(metricInnovation))}</span></div>
+                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 transition-all duration-300" style={{width: `${norm(metricInnovation)}%`}}></div>
+                  </div>
+               </div>
+               <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 mb-1"><span>Cost Efficiency (成本效益)</span> <span>{Math.round(norm(metricCost))}</span></div>
+                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500 transition-all duration-300" style={{width: `${norm(metricCost)}%`}}></div>
+                  </div>
+               </div>
+               <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-300 mb-1"><span>Tariff Risk (關稅制裁風險)</span> <span>{Math.round(norm(metricRisk))}</span></div>
+                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-full bg-red-500 transition-all duration-300" style={{width: `${norm(metricRisk)}%`}}></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         {/* Lab 4: Five Forces Simulator */}
+         <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl">
+           <h3 className="font-serif font-black text-xl mb-4 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconShield /> Lab 4: Five Forces Profitability Simulator (五力獲利模擬)</h3>
+           <p className="text-sm mb-6 font-medium text-slate-600 dark:text-slate-400">{lang === 'en' ? "Adjust industry forces to see how they squeeze Foxconn's gross margin." : "調整產業五力的強度，觀察其如何擠壓或釋放鴻海的毛利率空間。"}</p>
+           
+           <div className="space-y-4">
+              <div>
+                <label className="flex justify-between text-xs font-bold mb-1 text-slate-800 dark:text-slate-200">
+                  <span>Buyer Power (買方議價力 - e.g. Apple)</span> <span className="text-red-500">{forces.buyer}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={forces.buyer} onChange={(e)=>setForces({...forces, buyer: Number(e.target.value)})} className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-500"/>
+              </div>
+              <div>
+                <label className="flex justify-between text-xs font-bold mb-1 text-slate-800 dark:text-slate-200">
+                  <span>Supplier Power (供應商議價力 - e.g. TSMC)</span> <span className="text-orange-500">{forces.supplier}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={forces.supplier} onChange={(e)=>setForces({...forces, supplier: Number(e.target.value)})} className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500"/>
+              </div>
+              <div>
+                <label className="flex justify-between text-xs font-bold mb-1 text-slate-800 dark:text-slate-200">
+                  <span>Rivalry (同業競爭 - e.g. Quanta)</span> <span className="text-yellow-600">{forces.rivalry}%</span>
+                </label>
+                <input type="range" min="0" max="100" value={forces.rivalry} onChange={(e)=>setForces({...forces, rivalry: Number(e.target.value)})} className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-yellow-600"/>
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center justify-center p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl">
+               <div className="text-center">
+                 <div className="text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">{lang === 'en' ? "Simulated Gross Margin" : "模擬毛利率水準"}</div>
+                 <div className={`text-4xl font-black font-serif ${profitability < 30 ? 'text-red-500' : 'text-[#004030] dark:text-[#D8C3A5]'}`}>
+                   {(profitability / 10).toFixed(1)}%
+                 </div>
+               </div>
+            </div>
+         </div>
+       </div>
+
+       {/* Next / Prev Navigation */}
+       <div className="flex justify-between items-center pt-8 mt-12 border-t border-slate-300 dark:border-slate-700">
+        <button onClick={() => navTo(7)} className="flex items-center gap-2 px-6 py-3 font-serif font-bold text-slate-500 hover:text-[#004030] dark:hover:text-[#D8C3A5] transition-colors uppercase tracking-wider text-sm">
+          <IconChevronLeft size={20}/> {tUI('prevPage')}
+        </button>
+        <button onClick={() => navTo(9)} className="flex items-center gap-2 px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg font-serif font-bold shadow-md hover:bg-[#002b20] dark:hover:bg-white transition-colors uppercase tracking-wider text-sm">
+          {tUI('nextPage')} <IconChevronRight size={20}/>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const AnalyticsView = ({ lang, tUI, analyticsData, navTo }) => {
+  const [userData, setUserData] = useState({ group: '', id: '', name: '' });
+  
+  const handleExportCSV = () => {
+    if(!userData.group || !userData.id || !userData.name) {
+      alert(lang === 'en' ? "Please fill in all personal details." : "請完整填寫個人資料以利建檔。");
+      return;
+    }
+    
+    const dateStr = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    const filename = `Foxconn_StrategyReport_${userData.group}_${userData.name}_${dateStr}.csv`;
+    
+    let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + 
+      "Module,TimeSpent(s),Interactions,CardReviewed(Viewed/Total),QuizScore(Correct/Answered/Total)\n";
+    
+    for (let i = 1; i <= 7; i++) {
+        const d = analyticsData[i];
+        csvContent += `Theme ${i},${d.time},${d.clicks},${d.cardsViewed}/${DICT.THEMES[i-1].cards.length},${d.quizCorrect}/${d.quizAnswered}/${DICT.THEMES[i-1].quizzes.length}\n`;
+    }
+    
+    csvContent += `\nGroup,${userData.group}\nStudentID,${userData.id}\nName,${userData.name}\n`;
+      
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const calculateTotal = (key) => Object.values(analyticsData).reduce((a, b) => a + b[key], 0);
+
+  return (
+    <div className="max-w-5xl mx-auto pb-12 animate-fade-in mt-4">
+      <h1 className="text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-6">{tUI('analytics')}</h1>
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center shadow-md border border-slate-200 dark:border-slate-700">
+          <div className="text-slate-500 dark:text-slate-400 text-sm font-bold mb-2">{tUI('timeSpent')}</div>
+          <div className="text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{calculateTotal('time')}</div>
+        </div>
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center shadow-md border border-slate-200 dark:border-slate-700">
+          <div className="text-slate-500 dark:text-slate-400 text-sm font-bold mb-2">{tUI('clicks')}</div>
+          <div className="text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{calculateTotal('clicks')}</div>
+        </div>
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center shadow-md border border-slate-200 dark:border-slate-700">
+          <div className="text-slate-500 dark:text-slate-400 text-sm font-bold mb-2">{tUI('cardRate')}</div>
+          <div className="text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{calculateTotal('cardsViewed')}</div>
+        </div>
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-6 text-center shadow-md border border-slate-200 dark:border-slate-700">
+          <div className="text-slate-500 dark:text-slate-400 text-sm font-bold mb-2">{tUI('quizRate')}</div>
+          <div className="text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{calculateTotal('quizCorrect')}</div>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-8 border border-slate-200 dark:border-slate-700 shadow-xl mb-10 overflow-x-auto">
+        <h3 className="font-serif font-black text-xl mb-6 text-[#004030] dark:text-[#D8C3A5]">Module Breakdown (各分頁紀錄)</h3>
+        <table className="w-full text-sm text-left">
+            <thead>
+                <tr className="border-b-2 border-slate-200 dark:border-slate-700 text-[#004030] dark:text-[#D8C3A5]">
+                    <th className="pb-3 pr-4">Theme</th>
+                    <th className="pb-3 px-4">Time (s)</th>
+                    <th className="pb-3 px-4">Clicks</th>
+                    <th className="pb-3 px-4">Cards (View/Total)</th>
+                    <th className="pb-3 pl-4">Quiz (Corr/Ans/Total)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {[1, 2, 3, 4, 5, 6, 7].map(i => {
+                    const d = analyticsData[i];
+                    const tData = DICT.THEMES[i-1];
+                    return (
+                    <tr key={i} className="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/30">
+                        <td className="py-3 pr-4 font-bold text-slate-700 dark:text-slate-300 truncate max-w-[200px]">{tData.title[lang]}</td>
+                        <td className="py-3 px-4">{d.time}</td>
+                        <td className="py-3 px-4">{d.clicks}</td>
+                        <td className="py-3 px-4">{d.cardsViewed} / {tData.cards.length}</td>
+                        <td className="py-3 pl-4">{d.quizCorrect} / {d.quizAnswered} / {tData.quizzes.length}</td>
+                    </tr>
+                    )
+                })}
+            </tbody>
+        </table>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-8 border border-slate-200 dark:border-slate-700 shadow-xl">
+        <h3 className="font-serif font-black text-2xl mb-6 flex items-center gap-2 text-[#004030] dark:text-[#D8C3A5]"><IconDownload /> {tUI('exportCSV')}</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <input type="text" placeholder={tUI('group')} value={userData.group} onChange={e => setUserData({...userData, group: e.target.value})} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:border-[#004030] dark:focus:border-[#D8C3A5] outline-none font-bold"/>
+          <input type="text" placeholder={tUI('studentId')} value={userData.id} onChange={e => setUserData({...userData, id: e.target.value})} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:border-[#004030] dark:focus:border-[#D8C3A5] outline-none font-bold"/>
+          <input type="text" placeholder={tUI('name')} value={userData.name} onChange={e => setUserData({...userData, name: e.target.value})} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:border-[#004030] dark:focus:border-[#D8C3A5] outline-none font-bold"/>
+        </div>
+        <div className="flex gap-4">
+           <button onClick={handleExportCSV} className="px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg font-bold shadow-md hover:bg-[#002b20] dark:hover:bg-white flex items-center gap-2 transition-all"><IconDownload size={20}/> Export Research Data</button>
+           <button onClick={() => window.location.reload()} className="px-8 py-3 rounded-lg font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">{tUI('resetData')}</button>
+        </div>
+      </div>
+
+      {/* Next / Prev Navigation */}
+      <div className="flex justify-between items-center pt-8 mt-12 border-t border-slate-300 dark:border-slate-700">
+        <button onClick={() => navTo(8)} className="flex items-center gap-2 px-6 py-3 font-serif font-bold text-slate-500 hover:text-[#004030] dark:hover:text-[#D8C3A5] transition-colors uppercase tracking-wider text-sm">
+          <IconChevronLeft size={20}/> {tUI('prevPage')}
+        </button>
+        <button onClick={() => navTo(0)} className="flex items-center gap-2 px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg font-serif font-bold shadow-md hover:bg-[#002b20] dark:hover:bg-white transition-colors uppercase tracking-wider text-sm">
+          Return to Summary <IconChevronRight size={20}/>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ResourcesView = ({ tUI, navTo }) => {
+  return (
+    <div className="max-w-5xl mx-auto pb-12 animate-fade-in mt-4">
+       <h1 className="text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-6">{tUI('externalResources')}</h1>
+       <div className="p-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl flex flex-col gap-5">
+          <a href="https://www.foxconn.com/zh-tw/" target="_blank" rel="noreferrer" className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:border-[#004030] dark:hover:border-[#D8C3A5] border border-slate-200 dark:border-slate-700 text-[#004030] dark:text-[#D8C3A5] font-bold flex items-center justify-between transition-all shadow-sm">
+            <span>Hon Hai Technology Group (鴻海科技集團) Official Portal</span> <IconGlobe size={22}/>
+          </a>
+          <a href="https://www.mih-ev.org/" target="_blank" rel="noreferrer" className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:border-[#004030] dark:hover:border-[#D8C3A5] border border-slate-200 dark:border-slate-700 text-[#004030] dark:text-[#D8C3A5] font-bold flex items-center justify-between transition-all shadow-sm">
+            <span>MIH Open Platform (MIH 電動車開放平台)</span> <IconGlobe size={22}/>
+          </a>
+          <a href="https://www.weforum.org/agenda/macroeconomics/" target="_blank" rel="noreferrer" className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:border-[#004030] dark:hover:border-[#D8C3A5] border border-slate-200 dark:border-slate-700 text-[#004030] dark:text-[#D8C3A5] font-bold flex items-center justify-between transition-all shadow-sm">
+            <span>World Economic Forum: Macro Environment (世界經濟論壇總體經濟)</span> <IconGlobe size={22}/>
+          </a>
+          <a href="https://hbr.org/1979/03/how-competitive-forces-shape-strategy" target="_blank" rel="noreferrer" className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-lg hover:border-[#004030] dark:hover:border-[#D8C3A5] border border-slate-200 dark:border-slate-700 text-[#004030] dark:text-[#D8C3A5] font-bold flex items-center justify-between transition-all shadow-sm">
+            <span>Harvard Business Review: Porter's Five Forces (HBR 波特五力分析)</span> <IconGlobe size={22}/>
+          </a>
+       </div>
+
+       {/* Next / Prev Navigation */}
+       <div className="flex justify-between items-center pt-8 mt-12 border-t border-slate-300 dark:border-slate-700">
+        <button onClick={() => navTo(8)} className="flex items-center gap-2 px-6 py-3 font-serif font-bold text-slate-500 hover:text-[#004030] dark:hover:text-[#D8C3A5] transition-colors uppercase tracking-wider text-sm">
+          <IconChevronLeft size={20}/> {tUI('prevPage')}
+        </button>
+        <button onClick={() => navTo(10)} className="flex items-center gap-2 px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] rounded-lg font-serif font-bold shadow-md hover:bg-[#002b20] dark:hover:bg-white transition-colors uppercase tracking-wider text-sm">
+          {tUI('nextPage')} <IconChevronRight size={20}/>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/* ===== MAIN APP COMPONENT ===== */
+function App() {
+  useSecurity(); 
+  
+  const [lang, setLang] = useState('en'); 
+  const [isDark, setIsDark] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0); 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [speechSynthesisActive, setSpeechSynthesisActive] = useState(false);
+  
+  // Analytics State - Tracked per module (11 modules: 0-10)
+  const [analyticsData, setAnalyticsData] = useState(() => {
+    let initial = {};
+    for (let i = 0; i <= 10; i++) {
+        initial[i] = { time: 0, clicks: 0, cardsViewed: 0, quizCorrect: 0, quizAnswered: 0 };
+    }
+    return initial;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+        setAnalyticsData(prev => ({
+            ...prev,
+            [currentPage]: { ...prev[currentPage], time: prev[currentPage].time + 1 }
+        }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [currentPage]);
+
+  const handleGlobalClick = useCallback(() => {
+    setAnalyticsData(prev => ({
+        ...prev,
+        [currentPage]: { ...prev[currentPage], clicks: prev[currentPage].clicks + 1 }
+    }));
+  }, [currentPage]);
+
+  const t = useCallback((keyDict) => keyDict[lang], [lang]);
+  const tUI = useCallback((key) => DICT.UI[key][lang], [lang]);
+
+  const speakText = useCallback((text = null) => {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    synth.cancel();
+    
+    let contentToRead = text;
+    if (!contentToRead) {
+        if (currentPage === 0) {
+            contentToRead = `${DICT.OVERVIEW.title[lang]}. ${DICT.OVERVIEW.content[lang]}`;
+        } else if (currentPage >= 1 && currentPage <= 7) {
+            const th = DICT.THEMES[currentPage-1];
+            contentToRead = `${th.title[lang]}. ${DICT.UI.highlights[lang]}: ${th.highlights[lang].join(", ")}. ${DICT.UI.description[lang]}: ${th.description[lang]}. ${DICT.UI.wrapUp[lang]}: ${th.wrapUp[lang]}.`;
+        } else {
+            contentToRead = lang === 'en' ? "Please navigate to a theory section to use full page reading." : "請導航至理論章節以使用全頁朗讀功能。";
+        }
+    }
+
+    const utterance = new SpeechSynthesisUtterance(contentToRead);
+    utterance.lang = lang === 'en' ? 'en-GB' : 'zh-TW';
+    utterance.rate = 1.0;
+    
+    const voices = synth.getVoices();
+    if (lang === 'en') {
+      const enVoice = voices.find(v => v.lang === 'en-GB' && v.name.toLowerCase().includes('male'));
+      if(enVoice) utterance.voice = enVoice;
+    } else {
+      const twVoice = voices.find(v => v.lang === 'zh-TW' && (v.name.toLowerCase().includes('yating') || v.name.toLowerCase().includes('female')));
+      if(twVoice) utterance.voice = twVoice;
+    }
+    
+    utterance.onstart = () => setSpeechSynthesisActive(true);
+    utterance.onend = () => setSpeechSynthesisActive(false);
+    utterance.onerror = () => setSpeechSynthesisActive(false);
+    synth.speak(utterance);
+  }, [lang, currentPage]);
+  
+  const stopSpeak = useCallback(() => {
+    const synth = window.speechSynthesis;
+    if(synth) { 
+      synth.cancel(); 
+      setSpeechSynthesisActive(false); 
+    }
+  }, []);
+
+  const updateCardAnalytics = useCallback((themeId, viewed, clicks) => {
+    setAnalyticsData(prev => ({
+        ...prev,
+        [themeId]: { 
+            ...prev[themeId], 
+            cardsViewed: Math.max(prev[themeId].cardsViewed, viewed),
+            clicks: prev[themeId].clicks + (clicks ? 1 : 0)
+        }
+    }));
+  }, []);
+
+  const updateQuizAnalytics = useCallback((themeId, correct, answered) => {
+    setAnalyticsData(prev => ({
+        ...prev,
+        [themeId]: { 
+            ...prev[themeId], 
+            quizCorrect: Math.max(prev[themeId].quizCorrect, correct),
+            quizAnswered: Math.max(prev[themeId].quizAnswered, answered)
+        }
+    }));
+  }, []);
+
+  const navTo = useCallback((pageIdx) => {
+    stopSpeak();
+    setCurrentPage(pageIdx);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [stopSpeak]);
+
+  const renderPage = () => {
+    if (currentPage === 0) {
+      return <OverviewView t={t} tUI={tUI} navTo={navTo} lang={lang} />;
+    }
+    if (currentPage >= 1 && currentPage <= 7) {
+      return <ThemeContentView key={currentPage} themeData={DICT.THEMES[currentPage-1]} t={t} tUI={tUI} lang={lang} navTo={navTo} updateCardAnalytics={updateCardAnalytics} updateQuizAnalytics={updateQuizAnalytics} />;
+    }
+    if (currentPage === 8) return <InteractiveLabView lang={lang} tUI={tUI} navTo={navTo} />;
+    if (currentPage === 9) return <ResourcesView tUI={tUI} navTo={navTo} />;
+    if (currentPage === 10) return <AnalyticsView lang={lang} tUI={tUI} analyticsData={analyticsData} navTo={navTo} />;
+    return <OverviewView t={t} tUI={tUI} navTo={navTo} lang={lang} />;
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen" onClick={handleGlobalClick}>
+      <TopHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} navTo={navTo} tUI={tUI} speakText={speakText} stopSpeak={stopSpeak} speechSynthesisActive={speechSynthesisActive} lang={lang} setLang={setLang} isDark={isDark} setIsDark={setIsDark} />
+      <DrawerMenu menuOpen={menuOpen} navTo={navTo} tUI={tUI} t={t} currentPage={currentPage} />
+      
+      {menuOpen && <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 transition-opacity" onClick={() => setMenuOpen(false)}></div>}
+      
+      <main className="flex-1 pt-16 pb-16 px-4 transition-colors duration-300">
+        {renderPage()}
+      </main>
+
+      <FooterBlock />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
